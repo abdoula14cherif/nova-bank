@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test données</title>
+</head>
+<body>
+    <h1>🔍 Test de connexion aux données</h1>
+    <div id="result"></div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const supabase = supabase.createClient(
+            'https://lvbdafzdsuotairqkcnv.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI'
+        );
+
+        async function test() {
+            try {
+                // 1. Vérifier l'utilisateur connecté
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                // 2. Charger les données
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*');
+
+                document.getElementById('result').innerHTML = `
+                    <h2>✅ Connecté en tant que : ${user?.email || 'Non connecté'}</h2>
+                    <h3>📊 Données récupérées : ${data?.length || 0} utilisateurs</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    ${error ? `<p style="color:red">❌ Erreur: ${error.message}</p>` : ''}
+                `;
+            } catch (e) {
+                document.getElementById('result').innerHTML = `<p style="color:red">❌ Exception: ${e.message}</p>`;
+            }
+        }
+
+        test();
+    </script>
+</body>
+</html>
