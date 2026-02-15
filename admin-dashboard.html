@@ -17,7 +17,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         .header {
             background: #0b2440;
             padding: 20px 30px;
@@ -52,14 +51,12 @@
             padding: 8px 20px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.9rem;
         }
 
         .admin-email {
             background: rgba(255,255,255,0.1);
             padding: 8px 20px;
             border-radius: 40px;
-            font-size: 0.9rem;
         }
 
         .logout-btn {
@@ -70,21 +67,18 @@
             border-radius: 40px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s;
         }
 
         .logout-btn:hover {
             background: rgba(255,255,255,0.2);
         }
 
-        /* Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 30px 20px;
         }
 
-        /* Statistiques globales */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -98,7 +92,6 @@
             padding: 25px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.02);
             border: 1px solid #eef2f6;
-            transition: all 0.3s;
         }
 
         .stat-card:hover {
@@ -123,10 +116,8 @@
         .stat-value small {
             font-size: 0.9rem;
             color: #8e9daf;
-            font-weight: 400;
         }
 
-        /* Barre de recherche et contrôles */
         .controls-section {
             background: white;
             border-radius: 40px;
@@ -149,13 +140,42 @@
             border-radius: 40px;
             font-size: 1rem;
             min-width: 250px;
-            transition: all 0.2s;
         }
 
         .search-input:focus {
             outline: none;
             border-color: #ff6b4a;
             box-shadow: 0 5px 15px rgba(255,107,74,0.1);
+        }
+
+        .btn-refresh {
+            background: #0b2440;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-refresh:hover {
+            background: #1e3f6e;
+            transform: translateY(-2px);
+        }
+
+        .btn-export {
+            background: #34a853;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-export:hover {
+            background: #2d8e47;
+            transform: translateY(-2px);
         }
 
         .filter-buttons {
@@ -172,7 +192,6 @@
             font-weight: 600;
             color: #0b2440;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
         .btn-filter:hover {
@@ -185,47 +204,12 @@
             color: white;
         }
 
-        .btn-refresh {
-            background: #0b2440;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-refresh:hover {
-            background: #1e3f6e;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(11,36,64,0.2);
-        }
-
-        .btn-export {
-            background: #34a853;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-export:hover {
-            background: #2d8e47;
-            transform: translateY(-2px);
-        }
-
-        /* Tableau des utilisateurs */
         .table-container {
             background: white;
             border-radius: 40px;
             padding: 25px;
             border: 1px solid #eef2f6;
             overflow-x: auto;
-            margin-bottom: 30px;
         }
 
         .table-header {
@@ -233,8 +217,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
         }
 
         .table-header h2 {
@@ -254,7 +236,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1300px;
+            min-width: 1200px;
         }
 
         th {
@@ -278,18 +260,6 @@
             background: #f9fcff;
         }
 
-        .user-name {
-            font-weight: 700;
-            color: #0b2440;
-        }
-
-        .user-id {
-            font-size: 0.75rem;
-            color: #8e9daf;
-            font-family: monospace;
-            margin-top: 3px;
-        }
-
         .badge-admin {
             background: #ff6b4a;
             color: white;
@@ -297,7 +267,6 @@
             border-radius: 30px;
             font-size: 0.8rem;
             font-weight: 600;
-            margin-left: 8px;
         }
 
         .badge-user {
@@ -307,25 +276,6 @@
             border-radius: 30px;
             font-size: 0.8rem;
             font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .status-active {
-            background: #e3f5eb;
-            color: #34a853;
-        }
-
-        .status-inactive {
-            background: #ffeae8;
-            color: #ff6b4a;
         }
 
         .balance-cell {
@@ -355,66 +305,28 @@
             color: white;
         }
 
-        .btn-icon.add {
-            background: #34a853;
-        }
+        .btn-icon.add { background: #34a853; }
         .btn-icon.add:hover { background: #2d8e47; transform: scale(1.1); }
 
-        .btn-icon.remove {
-            background: #ff8a5c;
-        }
+        .btn-icon.remove { background: #ff8a5c; }
         .btn-icon.remove:hover { background: #ff6b4a; transform: scale(1.1); }
 
-        .btn-icon.edit {
-            background: #0b2440;
-        }
+        .btn-icon.edit { background: #0b2440; }
         .btn-icon.edit:hover { background: #1e3f6e; transform: scale(1.1); }
 
-        .btn-icon.delete {
-            background: #ff3b3b;
-        }
-        .btn-icon.delete:hover { background: #e03131; transform: scale(1.1); }
-
-        .btn-icon.block {
-            background: #ffb74d;
-        }
-        .btn-icon.block:hover { background: #ff9800; transform: scale(1.1); }
-
-        .btn-icon.unblock {
-            background: #66bb6a;
-        }
-        .btn-icon.unblock:hover { background: #4caf50; transform: scale(1.1); }
-
-        .btn-icon.view {
-            background: #5f738c;
-        }
+        .btn-icon.view { background: #5f738c; }
         .btn-icon.view:hover { background: #4a5d73; transform: scale(1.1); }
 
-        .btn-text {
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #f0f4ff;
-            color: #0b2440;
-        }
+        .btn-icon.role { background: #ffb74d; }
+        .btn-icon.role:hover { background: #ff9800; transform: scale(1.1); }
 
-        .btn-text:hover {
-            background: #0b2440;
-            color: white;
-        }
+        .btn-icon.delete { background: #ff3b3b; }
+        .btn-icon.delete:hover { background: #e03131; transform: scale(1.1); }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.5);
             align-items: center;
             justify-content: center;
@@ -467,7 +379,6 @@
             font-size: 2rem;
             cursor: pointer;
             color: #8e9daf;
-            transition: all 0.2s;
         }
 
         .close-modal:hover {
@@ -519,7 +430,6 @@
             border: 2px solid #e6ecf2;
             border-radius: 40px;
             font-size: 1rem;
-            transition: all 0.2s;
         }
 
         .form-group input:focus, .form-group select:focus {
@@ -540,40 +450,25 @@
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .btn-modal-primary {
-            background: #0b2440;
-            color: white;
-        }
+        .btn-modal-primary { background: #0b2440; color: white; }
         .btn-modal-primary:hover { background: #1e3f6e; }
 
-        .btn-modal-secondary {
-            background: #f0f4ff;
-            color: #0b2440;
-        }
+        .btn-modal-secondary { background: #f0f4ff; color: #0b2440; }
         .btn-modal-secondary:hover { background: #e0e8ff; }
 
-        .btn-modal-success {
-            background: #34a853;
-            color: white;
-        }
+        .btn-modal-success { background: #34a853; color: white; }
         .btn-modal-success:hover { background: #2d8e47; }
 
-        .btn-modal-danger {
-            background: #ff6b4a;
-            color: white;
-        }
+        .btn-modal-danger { background: #ff6b4a; color: white; }
         .btn-modal-danger:hover { background: #ff3b3b; }
 
-        /* Alert */
         .alert {
             padding: 16px 24px;
             border-radius: 40px;
             margin-bottom: 20px;
             display: none;
-            font-weight: 500;
             animation: slideIn 0.3s ease;
         }
 
@@ -594,13 +489,6 @@
             border: 1px solid #ffcdc8;
         }
 
-        .alert-warning {
-            background: #fff2dd;
-            color: #ff9800;
-            border: 1px solid #ffe0b2;
-        }
-
-        /* Loading */
         .loading {
             text-align: center;
             padding: 40px;
@@ -622,7 +510,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -638,7 +525,6 @@
             border: 2px solid #e6ecf2;
             background: white;
             cursor: pointer;
-            transition: all 0.2s;
             font-weight: 600;
         }
 
@@ -652,40 +538,13 @@
             color: white;
             border-color: #ff6b4a;
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .admin-info {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .search-row {
-                flex-direction: column;
-            }
-            
-            .filter-buttons {
-                justify-content: center;
-            }
-
-            .btn-icon {
-                width: 42px;
-                height: 42px;
-            }
-        }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="logo">NOVA<span>BANK</span></div>
         <div class="admin-info">
-            <span class="admin-badge">Super Administrateur</span>
+            <span class="admin-badge">Super Admin</span>
             <span class="admin-email" id="adminEmail">chargement...</span>
             <button class="logout-btn" onclick="logout()">Déconnexion</button>
         </div>
@@ -694,7 +553,7 @@
     <div class="container">
         <div class="alert" id="alertMessage"></div>
 
-        <!-- Statistiques globales -->
+        <!-- STATISTIQUES GLOBALES -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total utilisateurs</div>
@@ -712,118 +571,96 @@
                 <div class="stat-label">Solde moyen</div>
                 <div class="stat-value" id="avgBalance">0 <small>€</small></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Comptes actifs</div>
-                <div class="stat-value" id="activeUsers">0</div>
-            </div>
         </div>
 
-        <!-- Contrôles avancés -->
+        <!-- CONTROLES -->
         <div class="controls-section">
             <div class="search-row">
-                <input type="text" class="search-input" id="searchInput" placeholder="Rechercher par nom, email ou ID..." onkeyup="searchUsers()">
-                <button class="btn-refresh" onclick="loadUsers()">Actualiser</button>
+                <input type="text" class="search-input" id="searchInput" placeholder="Rechercher par nom ou email..." onkeyup="searchUsers()">
+                <button class="btn-refresh" onclick="loadAllData()">Actualiser</button>
                 <button class="btn-export" onclick="exportToCSV()">Exporter CSV</button>
             </div>
             <div class="filter-buttons">
-                <button class="btn-filter active" onclick="filterUsers('all')" id="filterAll">Tous</button>
-                <button class="btn-filter" onclick="filterUsers('admins')" id="filterAdmins">Admins</button>
-                <button class="btn-filter" onclick="filterUsers('users')" id="filterUsers">Utilisateurs</button>
-                <button class="btn-filter" onclick="filterUsers('active')" id="filterActive">Actifs</button>
-                <button class="btn-filter" onclick="filterUsers('lowbalance')" id="filterLow">Solde &lt; 100€</button>
-                <button class="btn-filter" onclick="sortByBalance()" id="sortBalance">Trier par solde ▼</button>
+                <button class="btn-filter active" onclick="filterUsers('all')">Tous</button>
+                <button class="btn-filter" onclick="filterUsers('admins')">Admins</button>
+                <button class="btn-filter" onclick="filterUsers('users')">Utilisateurs</button>
             </div>
         </div>
 
-        <!-- Tableau des utilisateurs (GESTION COMPLÈTE) -->
+        <!-- TABLEAU DES UTILISATEURS -->
         <div class="table-container">
             <div class="table-header">
-                <h2>Gestion complète des utilisateurs</h2>
+                <h2>📋 Tous les utilisateurs</h2>
                 <span class="user-count" id="userCount">0 utilisateurs</span>
             </div>
 
             <div id="usersTable">
                 <div class="loading">
                     <div class="spinner"></div>
-                    <p>Chargement des utilisateurs...</p>
+                    <p>Chargement des données...</p>
                 </div>
             </div>
 
-            <!-- Pagination -->
             <div class="pagination" id="pagination"></div>
         </div>
     </div>
 
-    <!-- MODAL AJOUT DE SOLDE -->
-    <div class="modal" id="addBalanceModal">
+    <!-- MODALS -->
+    <div class="modal" id="addModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Ajouter du solde</h3>
-                <button class="close-modal" onclick="closeModal('addBalanceModal')">&times;</button>
+                <h3>💰 Ajouter du solde</h3>
+                <button class="close-modal" onclick="closeModal('addModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="user-detail-card" id="addUserInfo"></div>
                 <div class="form-group">
-                    <label>Montant à ajouter (€)</label>
-                    <input type="number" id="addAmount" placeholder="Ex: 500" min="0" step="10">
-                </div>
-                <div class="form-group">
-                    <label>Raison / Description</label>
-                    <input type="text" id="addReason" placeholder="Ex: Crédit manuel">
+                    <label>Montant (€)</label>
+                    <input type="number" id="addAmount" placeholder="Ex: 500">
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn-modal btn-modal-secondary" onclick="closeModal('addBalanceModal')">Annuler</button>
-                <button class="btn-modal btn-modal-success" onclick="confirmAddBalance()">Ajouter</button>
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('addModal')">Annuler</button>
+                <button class="btn-modal btn-modal-success" onclick="confirmAdd()">Ajouter</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL RETRAIT DE SOLDE -->
-    <div class="modal" id="removeBalanceModal">
+    <div class="modal" id="removeModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Retirer du solde</h3>
-                <button class="close-modal" onclick="closeModal('removeBalanceModal')">&times;</button>
+                <h3>💸 Retirer du solde</h3>
+                <button class="close-modal" onclick="closeModal('removeModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="user-detail-card" id="removeUserInfo"></div>
                 <div class="form-group">
-                    <label>Montant à retirer (€)</label>
-                    <input type="number" id="removeAmount" placeholder="Ex: 100" min="0" step="10">
-                </div>
-                <div class="form-group">
-                    <label>Raison / Description</label>
-                    <input type="text" id="removeReason" placeholder="Ex: Débit manuel">
+                    <label>Montant (€)</label>
+                    <input type="number" id="removeAmount" placeholder="Ex: 100">
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn-modal btn-modal-secondary" onclick="closeModal('removeBalanceModal')">Annuler</button>
-                <button class="btn-modal btn-modal-danger" onclick="confirmRemoveBalance()">Retirer</button>
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('removeModal')">Annuler</button>
+                <button class="btn-modal btn-modal-danger" onclick="confirmRemove()">Retirer</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL MODIFIER UTILISATEUR -->
-    <div class="modal" id="editUserModal">
+    <div class="modal" id="editModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Modifier l'utilisateur</h3>
-                <button class="close-modal" onclick="closeModal('editUserModal')">&times;</button>
+                <h3>✏️ Modifier l'utilisateur</h3>
+                <button class="close-modal" onclick="closeModal('editModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="user-detail-card" id="editUserInfo"></div>
                 <div class="form-group">
-                    <label>Nom complet</label>
-                    <input type="text" id="editNom" placeholder="Nom">
+                    <label>Nom</label>
+                    <input type="text" id="editNom">
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" id="editEmail" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <label>Solde</label>
-                    <input type="number" id="editSolde" placeholder="Solde" step="0.01">
+                    <input type="email" id="editEmail">
                 </div>
                 <div class="form-group">
                     <label>Rôle</label>
@@ -834,72 +671,44 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn-modal btn-modal-secondary" onclick="closeModal('editUserModal')">Annuler</button>
-                <button class="btn-modal btn-modal-primary" onclick="confirmEditUser()">Enregistrer</button>
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('editModal')">Annuler</button>
+                <button class="btn-modal btn-modal-primary" onclick="confirmEdit()">Enregistrer</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DÉTAILS UTILISATEUR -->
-    <div class="modal" id="userDetailsModal">
+    <div class="modal" id="detailsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Détails complets</h3>
-                <button class="close-modal" onclick="closeModal('userDetailsModal')">&times;</button>
+                <h3>🔍 Détails complets</h3>
+                <button class="close-modal" onclick="closeModal('detailsModal')">&times;</button>
             </div>
-            <div class="modal-body" id="userDetailsContent"></div>
+            <div class="modal-body" id="detailsContent"></div>
             <div class="modal-actions">
-                <button class="btn-modal btn-modal-secondary" onclick="closeModal('userDetailsModal')">Fermer</button>
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('detailsModal')">Fermer</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL CONFIRMATION SUPPRESSION -->
-    <div class="modal" id="deleteUserModal">
+    <div class="modal" id="deleteModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>⚠️ Confirmation suppression</h3>
-                <button class="close-modal" onclick="closeModal('deleteUserModal')">&times;</button>
+                <h3>⚠️ Confirmation</h3>
+                <button class="close-modal" onclick="closeModal('deleteModal')">&times;</button>
             </div>
             <div class="modal-body">
-                <p>Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?</p>
+                <p>Supprimer définitivement cet utilisateur ?</p>
                 <div class="user-detail-card" id="deleteUserInfo"></div>
-                <p style="color: #ff6b4a; margin-top: 15px; font-weight: 600;">⚠️ Cette action est irréversible !</p>
             </div>
             <div class="modal-actions">
-                <button class="btn-modal btn-modal-secondary" onclick="closeModal('deleteUserModal')">Annuler</button>
-                <button class="btn-modal btn-modal-danger" onclick="confirmDeleteUser()">Supprimer définitivement</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL CHANGEMENT DE RÔLE -->
-    <div class="modal" id="roleModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Changer le rôle</h3>
-                <button class="close-modal" onclick="closeModal('roleModal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="user-detail-card" id="roleUserInfo"></div>
-                <div class="form-group">
-                    <label>Nouveau rôle</label>
-                    <select id="newRole">
-                        <option value="user">Utilisateur standard</option>
-                        <option value="admin">Administrateur</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="btn-modal btn-modal-secondary" onclick="closeModal('roleModal')">Annuler</button>
-                <button class="btn-modal btn-modal-primary" onclick="confirmRoleChange()">Changer le rôle</button>
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('deleteModal')">Annuler</button>
+                <button class="btn-modal btn-modal-danger" onclick="confirmDelete()">Supprimer</button>
             </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Configuration Supabase
         const SUPABASE_URL = 'https://lvbdafzdsuotairqkcnv.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
         
@@ -907,30 +716,21 @@
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
-
-        // Variables globales
         let allUsers = [];
         let filteredUsers = [];
         let currentUserId = null;
-        let currentFilter = 'all';
         let currentPage = 1;
         const usersPerPage = 10;
 
-        // Vérifier la session admin
-        async function checkAdminSession() {
+        async function checkAdmin() {
             const { data: { user } } = await _supabase.auth.getUser();
-            
             if (!user || user.email !== ADMIN_EMAIL) {
                 window.location.href = 'admin.html';
-                return;
             }
-
             document.getElementById('adminEmail').textContent = user.email;
-            return user;
         }
 
-        // Charger tous les utilisateurs
-        async function loadUsers() {
+        async function loadAllData() {
             try {
                 const { data, error } = await _supabase
                     .from('profiles')
@@ -941,97 +741,63 @@
 
                 allUsers = data || [];
                 filteredUsers = [...allUsers];
-                displayUsers();
-                updateStats();
                 
+                // Statistiques
+                document.getElementById('totalUsers').textContent = allUsers.length;
+                document.getElementById('totalAdmins').textContent = allUsers.filter(u => u.role === 'admin').length;
+                const totalBalance = allUsers.reduce((sum, u) => sum + (u.solde || 0), 0);
+                document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
+                document.getElementById('avgBalance').textContent = (totalBalance / (allUsers.length || 1)).toFixed(2);
+                document.getElementById('userCount').textContent = allUsers.length + ' utilisateurs';
+
+                displayUsers();
             } catch (error) {
-                console.error('Erreur chargement:', error);
-                showAlert('Erreur lors du chargement', 'error');
+                showAlert('Erreur: ' + error.message, 'error');
             }
         }
 
-        // Afficher les utilisateurs
         function displayUsers() {
-            const container = document.getElementById('usersTable');
             const start = (currentPage - 1) * usersPerPage;
             const end = start + usersPerPage;
             const usersToShow = filteredUsers.slice(start, end);
 
-            document.getElementById('userCount').textContent = `${filteredUsers.length} utilisateur${filteredUsers.length > 1 ? 's' : ''}`;
-
             if (!usersToShow.length) {
-                container.innerHTML = '<p style="text-align: center; padding: 40px;">Aucun utilisateur trouvé</p>';
-                updatePagination();
+                document.getElementById('usersTable').innerHTML = '<p style="text-align:center; padding:40px;">Aucun utilisateur</p>';
                 return;
             }
 
-            let html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Utilisateur</th>
-                            <th>Email</th>
-                            <th>Rôle</th>
-                            <th>Solde</th>
-                            <th>Inscription</th>
-                            <th>Actions (Tout gérer)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
+            let html = '<table><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Solde</th><th>Inscription</th><th>Actions</th></tr>';
+            
             usersToShow.forEach(user => {
                 const isAdmin = user.role === 'admin';
-                const date = new Date(user.created_at).toLocaleDateString('fr-FR');
-                
-                html += `
-                    <tr>
-                        <td>
-                            <div class="user-info">
-                                <span class="user-name">${user.nom || 'Non renseigné'}</span>
-                                <span class="user-id">ID: ${user.id.substring(0, 8)}...</span>
-                            </div>
-                        </td>
-                        <td>${user.email}</td>
-                        <td>
-                            <span class="${isAdmin ? 'badge-admin' : 'badge-user'}">
-                                ${isAdmin ? 'ADMIN' : 'Utilisateur'}
-                            </span>
-                        </td>
-                        <td class="balance-cell">${user.solde?.toFixed(2) || 0} €</td>
-                        <td>${date}</td>
-                        <td class="actions-cell">
-                            <button class="btn-icon add" onclick="openAddModal('${user.id}', '${user.nom}', ${user.solde})" title="Ajouter de l'argent">💰+</button>
-                            <button class="btn-icon remove" onclick="openRemoveModal('${user.id}', '${user.nom}', ${user.solde})" title="Retirer de l'argent">💰-</button>
-                            <button class="btn-icon edit" onclick="openEditModal('${user.id}')" title="Modifier">✎</button>
-                            <button class="btn-icon view" onclick="viewUserDetails('${user.id}')" title="Détails">👁️</button>
-                            <button class="btn-icon ${isAdmin ? 'unblock' : 'block'}" onclick="changeRole('${user.id}', '${user.nom}', '${user.role}')" title="Changer rôle">⚡</button>
-                            <button class="btn-icon delete" onclick="openDeleteModal('${user.id}', '${user.nom}')" title="Supprimer">×</button>
-                        </td>
-                    </tr>
-                `;
+                html += `<tr>
+                    <td><strong>${user.nom || '-'}</strong></td>
+                    <td>${user.email}</td>
+                    <td><span class="${isAdmin ? 'badge-admin' : 'badge-user'}">${isAdmin ? 'ADMIN' : 'User'}</span></td>
+                    <td class="balance-cell">${user.solde?.toFixed(2) || 0} €</td>
+                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td class="actions-cell">
+                        <button class="btn-icon add" onclick="openAddModal('${user.id}', '${user.nom}', ${user.solde})">💰+</button>
+                        <button class="btn-icon remove" onclick="openRemoveModal('${user.id}', '${user.nom}', ${user.solde})">💰-</button>
+                        <button class="btn-icon edit" onclick="openEditModal('${user.id}')">✎</button>
+                        <button class="btn-icon view" onclick="viewDetails('${user.id}')">👁️</button>
+                        ${!isAdmin ? `<button class="btn-icon delete" onclick="openDeleteModal('${user.id}', '${user.nom}')">×</button>` : ''}
+                    </td>
+                </tr>`;
             });
 
-            html += '</tbody></table>';
-            container.innerHTML = html;
+            html += '</table>';
+            document.getElementById('usersTable').innerHTML = html;
             updatePagination();
         }
 
-        // Mettre à jour la pagination
         function updatePagination() {
             const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-            const pagination = document.getElementById('pagination');
-            
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
-
-            let html = '';
+            let pagination = '';
             for (let i = 1; i <= totalPages; i++) {
-                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                pagination += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
             }
-            pagination.innerHTML = html;
+            document.getElementById('pagination').innerHTML = pagination;
         }
 
         function goToPage(page) {
@@ -1039,309 +805,128 @@
             displayUsers();
         }
 
-        // Mettre à jour les statistiques
-        function updateStats() {
-            const total = allUsers.length;
-            const admins = allUsers.filter(u => u.role === 'admin').length;
-            const totalBalance = allUsers.reduce((sum, u) => sum + (u.solde || 0), 0);
-            const avgBalance = total > 0 ? totalBalance / total : 0;
-            const activeUsers = allUsers.length; // À adapter si vous avez un champ "active"
-
-            document.getElementById('totalUsers').textContent = total;
-            document.getElementById('totalAdmins').textContent = admins;
-            document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
-            document.getElementById('avgBalance').textContent = avgBalance.toFixed(2);
-            document.getElementById('activeUsers').textContent = activeUsers;
-        }
-
-        // Recherche
         function searchUsers() {
             const search = document.getElementById('searchInput').value.toLowerCase();
-            
-            if (!search) {
-                filteredUsers = [...allUsers];
-            } else {
-                filteredUsers = allUsers.filter(user => 
-                    (user.nom && user.nom.toLowerCase().includes(search)) ||
-                    (user.email && user.email.toLowerCase().includes(search)) ||
-                    (user.id && user.id.toLowerCase().includes(search))
-                );
-            }
+            filteredUsers = allUsers.filter(u => 
+                (u.nom && u.nom.toLowerCase().includes(search)) || 
+                u.email.toLowerCase().includes(search)
+            );
             currentPage = 1;
             displayUsers();
         }
 
-        // Filtrer
-        function filterUsers(filter) {
-            currentFilter = filter;
-            
-            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`).classList.add('active');
-
-            if (filter === 'all') {
-                filteredUsers = [...allUsers];
-            } else if (filter === 'admins') {
-                filteredUsers = allUsers.filter(u => u.role === 'admin');
-            } else if (filter === 'users') {
-                filteredUsers = allUsers.filter(u => u.role !== 'admin');
-            } else if (filter === 'active') {
-                filteredUsers = allUsers.filter(u => true); // À adapter
-            } else if (filter === 'lowbalance') {
-                filteredUsers = allUsers.filter(u => (u.solde || 0) < 100);
-            }
+        function filterUsers(type) {
+            if (type === 'all') filteredUsers = [...allUsers];
+            if (type === 'admins') filteredUsers = allUsers.filter(u => u.role === 'admin');
+            if (type === 'users') filteredUsers = allUsers.filter(u => u.role !== 'admin');
             currentPage = 1;
             displayUsers();
         }
 
-        // Trier par solde
-        function sortByBalance() {
-            const sorted = [...filteredUsers].sort((a, b) => (b.solde || 0) - (a.solde || 0));
-            filteredUsers = sorted;
-            displayUsers();
-        }
-
-        // Ouvrir modal ajout
         function openAddModal(id, name, balance) {
             currentUserId = id;
-            document.getElementById('addUserInfo').innerHTML = `
-                <p><strong>Utilisateur:</strong> ${name || 'Non renseigné'}</p>
-                <p><strong>Solde actuel:</strong> ${balance || 0} €</p>
-            `;
-            document.getElementById('addAmount').value = '';
-            document.getElementById('addReason').value = '';
-            document.getElementById('addBalanceModal').classList.add('active');
+            document.getElementById('addUserInfo').innerHTML = `<p><strong>${name || 'User'}</strong> - Solde: ${balance || 0} €</p>`;
+            document.getElementById('addModal').classList.add('active');
         }
 
-        // Confirmer ajout
-        async function confirmAddBalance() {
+        async function confirmAdd() {
             const amount = parseFloat(document.getElementById('addAmount').value);
-            const reason = document.getElementById('addReason').value || 'Crédit manuel';
+            if (!amount || amount <= 0) return showAlert('Montant invalide', 'error');
             
-            if (!amount || amount <= 0) {
-                showAlert('Montant invalide', 'error');
-                return;
-            }
-
             const user = allUsers.find(u => u.id === currentUserId);
             const newBalance = (user.solde || 0) + amount;
 
-            const { error } = await _supabase
-                .from('profiles')
-                .update({ solde: newBalance })
-                .eq('id', currentUserId);
-
-            if (error) {
-                showAlert('Erreur: ' + error.message, 'error');
-            } else {
-                showAlert(`${amount} € ajouté avec succès à ${user.nom || 'l\'utilisateur'}`, 'success');
-                closeModal('addBalanceModal');
-                loadUsers();
-            }
+            const { error } = await _supabase.from('profiles').update({ solde: newBalance }).eq('id', currentUserId);
+            if (error) return showAlert(error.message, 'error');
+            
+            showAlert(`${amount} € ajouté`, 'success');
+            closeModal('addModal');
+            loadAllData();
         }
 
-        // Ouvrir modal retrait
         function openRemoveModal(id, name, balance) {
             currentUserId = id;
-            document.getElementById('removeUserInfo').innerHTML = `
-                <p><strong>Utilisateur:</strong> ${name || 'Non renseigné'}</p>
-                <p><strong>Solde actuel:</strong> ${balance || 0} €</p>
-            `;
-            document.getElementById('removeAmount').value = '';
-            document.getElementById('removeReason').value = '';
-            document.getElementById('removeBalanceModal').classList.add('active');
+            document.getElementById('removeUserInfo').innerHTML = `<p><strong>${name || 'User'}</strong> - Solde: ${balance || 0} €</p>`;
+            document.getElementById('removeModal').classList.add('active');
         }
 
-        // Confirmer retrait
-        async function confirmRemoveBalance() {
+        async function confirmRemove() {
             const amount = parseFloat(document.getElementById('removeAmount').value);
-            const reason = document.getElementById('removeReason').value || 'Débit manuel';
+            if (!amount || amount <= 0) return showAlert('Montant invalide', 'error');
             
-            if (!amount || amount <= 0) {
-                showAlert('Montant invalide', 'error');
-                return;
-            }
-
             const user = allUsers.find(u => u.id === currentUserId);
             const newBalance = (user.solde || 0) - amount;
+            if (newBalance < 0) return showAlert('Solde insuffisant', 'error');
 
-            if (newBalance < 0) {
-                showAlert('Solde insuffisant', 'error');
-                return;
-            }
-
-            const { error } = await _supabase
-                .from('profiles')
-                .update({ solde: newBalance })
-                .eq('id', currentUserId);
-
-            if (error) {
-                showAlert('Erreur: ' + error.message, 'error');
-            } else {
-                showAlert(`${amount} € retiré avec succès de ${user.nom || 'l\'utilisateur'}`, 'success');
-                closeModal('removeBalanceModal');
-                loadUsers();
-            }
+            const { error } = await _supabase.from('profiles').update({ solde: newBalance }).eq('id', currentUserId);
+            if (error) return showAlert(error.message, 'error');
+            
+            showAlert(`${amount} € retiré`, 'success');
+            closeModal('removeModal');
+            loadAllData();
         }
 
-        // Ouvrir modal modification
         function openEditModal(id) {
             const user = allUsers.find(u => u.id === id);
-            if (!user) return;
-
             currentUserId = id;
-            document.getElementById('editUserInfo').innerHTML = `
-                <p><strong>ID:</strong> ${user.id}</p>
-            `;
+            document.getElementById('editUserInfo').innerHTML = `<p><strong>ID:</strong> ${id.substring(0,8)}...</p>`;
             document.getElementById('editNom').value = user.nom || '';
             document.getElementById('editEmail').value = user.email || '';
-            document.getElementById('editSolde').value = user.solde || 0;
             document.getElementById('editRole').value = user.role || 'user';
-            
-            document.getElementById('editUserModal').classList.add('active');
+            document.getElementById('editModal').classList.add('active');
         }
 
-        // Confirmer modification
-        async function confirmEditUser() {
-            const nom = document.getElementById('editNom').value.trim();
-            const email = document.getElementById('editEmail').value.trim();
-            const solde = parseFloat(document.getElementById('editSolde').value);
-            const role = document.getElementById('editRole').value;
-
-            const updates = {};
-            if (nom) updates.nom = nom;
-            if (email) updates.email = email;
-            if (!isNaN(solde)) updates.solde = solde;
-            if (role) updates.role = role;
-
-            const { error } = await _supabase
-                .from('profiles')
-                .update(updates)
-                .eq('id', currentUserId);
-
-            if (error) {
-                showAlert('Erreur: ' + error.message, 'error');
-            } else {
-                showAlert('Utilisateur modifié avec succès', 'success');
-                closeModal('editUserModal');
-                loadUsers();
-            }
+        async function confirmEdit() {
+            const updates = {
+                nom: document.getElementById('editNom').value,
+                email: document.getElementById('editEmail').value,
+                role: document.getElementById('editRole').value
+            };
+            const { error } = await _supabase.from('profiles').update(updates).eq('id', currentUserId);
+            if (error) return showAlert(error.message, 'error');
+            showAlert('Utilisateur modifié', 'success');
+            closeModal('editModal');
+            loadAllData();
         }
 
-        // Changer le rôle
-        function changeRole(id, name, currentRole) {
-            currentUserId = id;
-            document.getElementById('roleUserInfo').innerHTML = `
-                <p><strong>Utilisateur:</strong> ${name || 'Non renseigné'}</p>
-                <p><strong>Rôle actuel:</strong> ${currentRole === 'admin' ? 'Administrateur' : 'Utilisateur'}</p>
-            `;
-            document.getElementById('newRole').value = currentRole || 'user';
-            document.getElementById('roleModal').classList.add('active');
-        }
-
-        async function confirmRoleChange() {
-            const newRole = document.getElementById('newRole').value;
-            
-            const { error } = await _supabase
-                .from('profiles')
-                .update({ role: newRole })
-                .eq('id', currentUserId);
-
-            if (error) {
-                showAlert('Erreur: ' + error.message, 'error');
-            } else {
-                showAlert(`Rôle changé avec succès`, 'success');
-                closeModal('roleModal');
-                loadUsers();
-            }
-        }
-
-        // Voir détails utilisateur
-        function viewUserDetails(userId) {
-            const user = allUsers.find(u => u.id === userId);
-            if (!user) return;
-
-            document.getElementById('userDetailsContent').innerHTML = `
+        function viewDetails(id) {
+            const user = allUsers.find(u => u.id === id);
+            document.getElementById('detailsContent').innerHTML = `
                 <div class="user-detail-card">
-                    <div class="detail-row">
-                        <span class="detail-label">ID complet:</span>
-                        <span class="detail-value" style="font-size: 0.8rem;">${user.id}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Nom:</span>
-                        <span class="detail-value">${user.nom || 'Non renseigné'}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Email:</span>
-                        <span class="detail-value">${user.email}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Rôle:</span>
-                        <span class="detail-value">${user.role === 'admin' ? 'Administrateur' : 'Utilisateur'}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Solde:</span>
-                        <span class="detail-value">${user.solde?.toFixed(2) || 0} €</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Inscription:</span>
-                        <span class="detail-value">${new Date(user.created_at).toLocaleString()}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Dernière màj:</span>
-                        <span class="detail-value">${user.updated_at ? new Date(user.updated_at).toLocaleString() : 'Jamais'}</span>
-                    </div>
+                    <p><strong>ID:</strong> ${user.id}</p>
+                    <p><strong>Nom:</strong> ${user.nom || '-'}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Rôle:</strong> ${user.role || 'user'}</p>
+                    <p><strong>Solde:</strong> ${user.solde || 0} €</p>
+                    <p><strong>Inscription:</strong> ${new Date(user.created_at).toLocaleString()}</p>
                 </div>
             `;
-
-            document.getElementById('userDetailsModal').classList.add('active');
+            document.getElementById('detailsModal').classList.add('active');
         }
 
-        // Ouvrir modal suppression
         function openDeleteModal(id, name) {
             currentUserId = id;
-            document.getElementById('deleteUserInfo').innerHTML = `
-                <p><strong>Utilisateur:</strong> ${name || 'Non renseigné'}</p>
-                <p><strong>ID:</strong> ${id}</p>
-            `;
-            document.getElementById('deleteUserModal').classList.add('active');
+            document.getElementById('deleteUserInfo').innerHTML = `<p><strong>${name || 'Utilisateur'}</strong></p><p>ID: ${id}</p>`;
+            document.getElementById('deleteModal').classList.add('active');
         }
 
-        // Confirmer suppression
-        async function confirmDeleteUser() {
-            const user = allUsers.find(u => u.id === currentUserId);
-            
-            if (user.email === ADMIN_EMAIL) {
-                showAlert('Vous ne pouvez pas supprimer votre propre compte administrateur !', 'error');
-                closeModal('deleteUserModal');
-                return;
-            }
-
-            const { error } = await _supabase
-                .from('profiles')
-                .delete()
-                .eq('id', currentUserId);
-
-            if (error) {
-                showAlert('Erreur: ' + error.message, 'error');
-            } else {
-                showAlert('Utilisateur supprimé définitivement', 'success');
-                closeModal('deleteUserModal');
-                loadUsers();
-            }
+        async function confirmDelete() {
+            const { error } = await _supabase.from('profiles').delete().eq('id', currentUserId);
+            if (error) return showAlert(error.message, 'error');
+            showAlert('Utilisateur supprimé', 'success');
+            closeModal('deleteModal');
+            loadAllData();
         }
 
-        // Exporter en CSV
         function exportToCSV() {
-            const headers = ['ID', 'Nom', 'Email', 'Rôle', 'Solde', 'Date inscription'];
+            const headers = ['Nom', 'Email', 'Rôle', 'Solde', 'Date'];
             const csvData = allUsers.map(u => [
-                u.id,
                 u.nom || '',
                 u.email,
                 u.role || 'user',
                 u.solde || 0,
                 new Date(u.created_at).toLocaleDateString()
             ]);
-
             const csv = [headers, ...csvData].map(row => row.join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
@@ -1351,37 +936,25 @@
             a.click();
         }
 
-        // Fermer modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-            currentUserId = null;
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
         }
 
-        // Afficher alerte
-        function showAlert(message, type) {
+        function showAlert(msg, type) {
             const alert = document.getElementById('alertMessage');
-            alert.textContent = message;
+            alert.textContent = msg;
             alert.className = `alert alert-${type}`;
             alert.style.display = 'block';
-            
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 4000);
+            setTimeout(() => alert.style.display = 'none', 3000);
         }
 
-        // Déconnexion
         async function logout() {
             await _supabase.auth.signOut();
             window.location.href = 'admin.html';
         }
 
-        // Initialisation
-        async function init() {
-            await checkAdminSession();
-            await loadUsers();
-        }
-
-        init();
+        checkAdmin();
+        loadAllData();
     </script>
 </body>
 </html>
