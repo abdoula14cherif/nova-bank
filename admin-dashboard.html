@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NOVA BANK - Administration complète</title>
     <style>
+        /* GARDEZ TOUT VOTRE CSS ICI (identique) */
         * {
             margin: 0;
             padding: 0;
@@ -581,9 +582,9 @@
                 <button class="btn-export" onclick="exportToCSV()">Exporter CSV</button>
             </div>
             <div class="filter-buttons">
-                <button class="btn-filter active" onclick="filterUsers('all')">Tous</button>
-                <button class="btn-filter" onclick="filterUsers('admins')">Admins</button>
-                <button class="btn-filter" onclick="filterUsers('users')">Utilisateurs</button>
+                <button class="btn-filter active" onclick="filterUsers('all')" id="filterAll">Tous</button>
+                <button class="btn-filter" onclick="filterUsers('admins')" id="filterAdmins">Admins</button>
+                <button class="btn-filter" onclick="filterUsers('users')" id="filterUsers">Utilisateurs</button>
             </div>
         </div>
 
@@ -709,6 +710,7 @@
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
+        // ✅ CONFIGURATION
         const SUPABASE_URL = 'https://lvbdafzdsuotairqkcnv.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
         
@@ -722,14 +724,22 @@
         let currentPage = 1;
         const usersPerPage = 10;
 
+        // ✅ VÉRIFIER ADMIN
         async function checkAdmin() {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (!user || user.email !== ADMIN_EMAIL) {
+            try {
+                const { data: { user }, error } = await _supabase.auth.getUser();
+                if (error || !user || user.email !== ADMIN_EMAIL) {
+                    window.location.href = 'admin.html';
+                    return;
+                }
+                document.getElementById('adminEmail').textContent = user.email;
+            } catch (error) {
+                console.error('Erreur vérification admin:', error);
                 window.location.href = 'admin.html';
             }
-            document.getElementById('adminEmail').textContent = user.email;
         }
 
+        // ✅ CHARGER TOUTES LES DONNÉES
         async function loadAllData() {
             try {
                 const { data, error } = await _supabase
@@ -737,32 +747,55 @@
                     .select('*')
                     .order('created_at', { ascending: false });
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Erreur Supabase:', error);
+                    document.getElementById('usersTable').innerHTML = `
+                        <p style="color: red; text-align: center; padding: 40px;">
+                            ❌ Erreur: ${error.message}
+                        </p>
+                    `;
+                    return;
+                }
 
                 allUsers = data || [];
                 filteredUsers = [...allUsers];
                 
-                // Statistiques
-                document.getElementById('totalUsers').textContent = allUsers.length;
-                document.getElementById('totalAdmins').textContent = allUsers.filter(u => u.role === 'admin').length;
-                const totalBalance = allUsers.reduce((sum, u) => sum + (u.solde || 0), 0);
-                document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
-                document.getElementById('avgBalance').textContent = (totalBalance / (allUsers.length || 1)).toFixed(2);
-                document.getElementById('userCount').textContent = allUsers.length + ' utilisateurs';
-
+                // Mettre à jour les statistiques
+                updateStats();
+                
+                // Afficher les utilisateurs
                 displayUsers();
+                
             } catch (error) {
-                showAlert('Erreur: ' + error.message, 'error');
+                console.error('Erreur chargement:', error);
+                document.getElementById('usersTable').innerHTML = `
+                    <p style="color: red; text-align: center; padding: 40px;">
+                        ❌ Erreur: ${error.message}
+                    </p>
+                `;
             }
         }
 
+        // ✅ METTRE À JOUR LES STATISTIQUES
+        function updateStats() {
+            document.getElementById('totalUsers').textContent = allUsers.length;
+            document.getElementById('totalAdmins').textContent = allUsers.filter(u => u.role === 'admin').length;
+            
+            const totalBalance = allUsers.reduce((sum, u) => sum + (u.solde || 0), 0);
+            document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
+            document.getElementById('avgBalance').textContent = (totalBalance / (allUsers.length || 1)).toFixed(2);
+            document.getElementById('userCount').textContent = allUsers.length + ' utilisateurs';
+        }
+
+        // ✅ AFFICHER LES UTILISATEURS
         function displayUsers() {
             const start = (currentPage - 1) * usersPerPage;
             const end = start + usersPerPage;
             const usersToShow = filteredUsers.slice(start, end);
 
-            if (!usersToShow.length) {
-                document.getElementById('usersTable').innerHTML = '<p style="text-align:center; padding:40px;">Aucun utilisateur</p>';
+            if (!usersToShow || usersToShow.length === 0) {
+                document.getElementById('usersTable').innerHTML = '<p style="text-align:center; padding:40px;">Aucun utilisateur trouvé</p>';
+                updatePagination();
                 return;
             }
 
@@ -774,14 +807,14 @@
                     <td><strong>${user.nom || '-'}</strong></td>
                     <td>${user.email}</td>
                     <td><span class="${isAdmin ? 'badge-admin' : 'badge-user'}">${isAdmin ? 'ADMIN' : 'User'}</span></td>
-                    <td class="balance-cell">${user.solde?.toFixed(2) || 0} €</td>
+                    <td class="balance-cell">${(user.solde || 0).toFixed(2)} €</td>
                     <td>${new Date(user.created_at).toLocaleDateString()}</td>
                     <td class="actions-cell">
-                        <button class="btn-icon add" onclick="openAddModal('${user.id}', '${user.nom}', ${user.solde})">💰+</button>
-                        <button class="btn-icon remove" onclick="openRemoveModal('${user.id}', '${user.nom}', ${user.solde})">💰-</button>
+                        <button class="btn-icon add" onclick="openAddModal('${user.id}', '${user.nom || ''}', ${user.solde || 0})">💰+</button>
+                        <button class="btn-icon remove" onclick="openRemoveModal('${user.id}', '${user.nom || ''}', ${user.solde || 0})">💰-</button>
                         <button class="btn-icon edit" onclick="openEditModal('${user.id}')">✎</button>
                         <button class="btn-icon view" onclick="viewDetails('${user.id}')">👁️</button>
-                        ${!isAdmin ? `<button class="btn-icon delete" onclick="openDeleteModal('${user.id}', '${user.nom}')">×</button>` : ''}
+                        ${!isAdmin ? `<button class="btn-icon delete" onclick="openDeleteModal('${user.id}', '${user.nom || ''}')">×</button>` : ''}
                     </td>
                 </tr>`;
             });
@@ -791,8 +824,14 @@
             updatePagination();
         }
 
+        // ✅ PAGINATION
         function updatePagination() {
             const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+            if (totalPages <= 1) {
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+            
             let pagination = '';
             for (let i = 1; i <= totalPages; i++) {
                 pagination += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
@@ -805,24 +844,38 @@
             displayUsers();
         }
 
+        // ✅ RECHERCHE
         function searchUsers() {
             const search = document.getElementById('searchInput').value.toLowerCase();
-            filteredUsers = allUsers.filter(u => 
-                (u.nom && u.nom.toLowerCase().includes(search)) || 
-                u.email.toLowerCase().includes(search)
-            );
+            if (!search) {
+                filteredUsers = [...allUsers];
+            } else {
+                filteredUsers = allUsers.filter(u => 
+                    (u.nom && u.nom.toLowerCase().includes(search)) || 
+                    u.email.toLowerCase().includes(search)
+                );
+            }
             currentPage = 1;
             displayUsers();
         }
 
+        // ✅ FILTRES
         function filterUsers(type) {
+            // Mettre à jour les boutons actifs
+            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+            if (type === 'all') document.getElementById('filterAll').classList.add('active');
+            if (type === 'admins') document.getElementById('filterAdmins').classList.add('active');
+            if (type === 'users') document.getElementById('filterUsers').classList.add('active');
+            
             if (type === 'all') filteredUsers = [...allUsers];
             if (type === 'admins') filteredUsers = allUsers.filter(u => u.role === 'admin');
             if (type === 'users') filteredUsers = allUsers.filter(u => u.role !== 'admin');
+            
             currentPage = 1;
             displayUsers();
         }
 
+        // ✅ MODALS - AJOUT
         function openAddModal(id, name, balance) {
             currentUserId = id;
             document.getElementById('addUserInfo').innerHTML = `<p><strong>${name || 'User'}</strong> - Solde: ${balance || 0} €</p>`;
@@ -831,19 +884,29 @@
 
         async function confirmAdd() {
             const amount = parseFloat(document.getElementById('addAmount').value);
-            if (!amount || amount <= 0) return showAlert('Montant invalide', 'error');
+            if (!amount || amount <= 0) {
+                showAlert('Montant invalide', 'error');
+                return;
+            }
             
             const user = allUsers.find(u => u.id === currentUserId);
             const newBalance = (user.solde || 0) + amount;
 
-            const { error } = await _supabase.from('profiles').update({ solde: newBalance }).eq('id', currentUserId);
-            if (error) return showAlert(error.message, 'error');
-            
-            showAlert(`${amount} € ajouté`, 'success');
-            closeModal('addModal');
-            loadAllData();
+            const { error } = await _supabase
+                .from('profiles')
+                .update({ solde: newBalance })
+                .eq('id', currentUserId);
+                
+            if (error) {
+                showAlert(error.message, 'error');
+            } else {
+                showAlert(`${amount} € ajouté`, 'success');
+                closeModal('addModal');
+                loadAllData();
+            }
         }
 
+        // ✅ MODALS - RETRAIT
         function openRemoveModal(id, name, balance) {
             currentUserId = id;
             document.getElementById('removeUserInfo').innerHTML = `<p><strong>${name || 'User'}</strong> - Solde: ${balance || 0} €</p>`;
@@ -852,20 +915,34 @@
 
         async function confirmRemove() {
             const amount = parseFloat(document.getElementById('removeAmount').value);
-            if (!amount || amount <= 0) return showAlert('Montant invalide', 'error');
+            if (!amount || amount <= 0) {
+                showAlert('Montant invalide', 'error');
+                return;
+            }
             
             const user = allUsers.find(u => u.id === currentUserId);
             const newBalance = (user.solde || 0) - amount;
-            if (newBalance < 0) return showAlert('Solde insuffisant', 'error');
-
-            const { error } = await _supabase.from('profiles').update({ solde: newBalance }).eq('id', currentUserId);
-            if (error) return showAlert(error.message, 'error');
             
-            showAlert(`${amount} € retiré`, 'success');
-            closeModal('removeModal');
-            loadAllData();
+            if (newBalance < 0) {
+                showAlert('Solde insuffisant', 'error');
+                return;
+            }
+
+            const { error } = await _supabase
+                .from('profiles')
+                .update({ solde: newBalance })
+                .eq('id', currentUserId);
+                
+            if (error) {
+                showAlert(error.message, 'error');
+            } else {
+                showAlert(`${amount} € retiré`, 'success');
+                closeModal('removeModal');
+                loadAllData();
+            }
         }
 
+        // ✅ MODALS - MODIFICATION
         function openEditModal(id) {
             const user = allUsers.find(u => u.id === id);
             currentUserId = id;
@@ -882,15 +959,26 @@
                 email: document.getElementById('editEmail').value,
                 role: document.getElementById('editRole').value
             };
-            const { error } = await _supabase.from('profiles').update(updates).eq('id', currentUserId);
-            if (error) return showAlert(error.message, 'error');
-            showAlert('Utilisateur modifié', 'success');
-            closeModal('editModal');
-            loadAllData();
+            
+            const { error } = await _supabase
+                .from('profiles')
+                .update(updates)
+                .eq('id', currentUserId);
+                
+            if (error) {
+                showAlert(error.message, 'error');
+            } else {
+                showAlert('Utilisateur modifié', 'success');
+                closeModal('editModal');
+                loadAllData();
+            }
         }
 
+        // ✅ MODALS - DÉTAILS
         function viewDetails(id) {
             const user = allUsers.find(u => u.id === id);
+            if (!user) return;
+            
             document.getElementById('detailsContent').innerHTML = `
                 <div class="user-detail-card">
                     <p><strong>ID:</strong> ${user.id}</p>
@@ -904,6 +992,7 @@
             document.getElementById('detailsModal').classList.add('active');
         }
 
+        // ✅ MODALS - SUPPRESSION
         function openDeleteModal(id, name) {
             currentUserId = id;
             document.getElementById('deleteUserInfo').innerHTML = `<p><strong>${name || 'Utilisateur'}</strong></p><p>ID: ${id}</p>`;
@@ -911,13 +1000,21 @@
         }
 
         async function confirmDelete() {
-            const { error } = await _supabase.from('profiles').delete().eq('id', currentUserId);
-            if (error) return showAlert(error.message, 'error');
-            showAlert('Utilisateur supprimé', 'success');
-            closeModal('deleteModal');
-            loadAllData();
+            const { error } = await _supabase
+                .from('profiles')
+                .delete()
+                .eq('id', currentUserId);
+                
+            if (error) {
+                showAlert(error.message, 'error');
+            } else {
+                showAlert('Utilisateur supprimé', 'success');
+                closeModal('deleteModal');
+                loadAllData();
+            }
         }
 
+        // ✅ EXPORT CSV
         function exportToCSV() {
             const headers = ['Nom', 'Email', 'Rôle', 'Solde', 'Date'];
             const csvData = allUsers.map(u => [
@@ -927,6 +1024,7 @@
                 u.solde || 0,
                 new Date(u.created_at).toLocaleDateString()
             ]);
+            
             const csv = [headers, ...csvData].map(row => row.join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
@@ -936,10 +1034,13 @@
             a.click();
         }
 
+        // ✅ FERMER MODAL
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
+            currentUserId = null;
         }
 
+        // ✅ ALERTE
         function showAlert(msg, type) {
             const alert = document.getElementById('alertMessage');
             alert.textContent = msg;
@@ -948,13 +1049,17 @@
             setTimeout(() => alert.style.display = 'none', 3000);
         }
 
+        // ✅ DÉCONNEXION
         async function logout() {
             await _supabase.auth.signOut();
             window.location.href = 'admin.html';
         }
 
-        checkAdmin();
-        loadAllData();
+        // ✅ INITIALISATION
+        window.onload = async function() {
+            await checkAdmin();
+            await loadAllData();
+        };
     </script>
 </body>
 </html>
