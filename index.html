@@ -14,51 +14,43 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0b2440 0%, #1e3f6e 100%);
+            background: linear-gradient(145deg, #0a1e33 0%, #1a3a5f 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             position: relative;
-            overflow-x: hidden;
         }
 
-        /* Éléments décoratifs dynamiques */
+        /* Élément décoratif léger */
         body::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 107, 107, 0.05) 0%, transparent 70%);
-            animation: rotate 40s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            top: -20%;
+            right: -20%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(255, 107, 74, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 480px;
             width: 100%;
             background: white;
-            border-radius: 40px;
-            box-shadow: 0 25px 60px -15px rgba(11, 36, 64, 0.3);
+            border-radius: 48px;
+            box-shadow: 0 30px 60px -20px rgba(0, 20, 40, 0.4);
             overflow: hidden;
             position: relative;
-            z-index: 1;
-            animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            background: rgba(255, 255, 255, 0.95);
+            z-index: 2;
+            animation: appear 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes slideUp {
+        @keyframes appear {
             from {
                 opacity: 0;
-                transform: translateY(50px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -66,88 +58,63 @@
             }
         }
 
+        /* En-tête */
         .header {
-            background: linear-gradient(135deg, #0b2440 0%, #1e3f6e 100%);
-            padding: 40px 30px;
+            background: #0b2440;
+            padding: 36px 28px 28px;
             text-align: center;
-            position: relative;
             border-bottom: 4px solid #ff6b4a;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 12px;
-            transform: translateX(-50%) rotate(45deg);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border: 2px solid #ff6b4a;
+            position: relative;
         }
 
         .logo {
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             font-weight: 800;
             color: white;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
             line-height: 1.2;
+            margin-bottom: 8px;
         }
 
         .logo span {
-            color: #ff8a5c;
+            color: #ff6b4a;
             font-weight: 900;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             padding: 0 8px;
-            border-radius: 15px;
-            display: inline-block;
+            border-radius: 16px;
         }
 
         .tagline {
-            color: rgba(255, 255, 255, 0.85);
-            margin-top: 15px;
-            font-size: 1rem;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 1;
-            font-weight: 300;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .form-section {
-            padding: 45px 35px;
-        }
-
-        .form-title {
-            font-size: 2rem;
-            color: #0b2440;
-            margin-bottom: 10px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #0b2440, #1e3f6e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .form-subtitle {
-            color: #6a7b8c;
-            margin-bottom: 35px;
-            font-size: 1rem;
-            border-left: 4px solid #ff6b4a;
-            padding-left: 20px;
-            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
             font-weight: 400;
+            letter-spacing: 0.5px;
         }
 
+        /* Contenu formulaire */
+        .form-content {
+            padding: 40px 32px 48px;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b2440;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #5f738c;
+            font-size: 1rem;
+            margin-bottom: 32px;
+            padding-left: 16px;
+            border-left: 4px solid #ff6b4a;
+            line-height: 1.5;
+        }
+
+        /* Champs de formulaire */
         .form-group {
-            margin-bottom: 25px;
-            position: relative;
+            margin-bottom: 24px;
         }
 
         .form-group label {
@@ -156,127 +123,112 @@
             color: #1e3f6e;
             font-weight: 600;
             font-size: 0.95rem;
-            margin-left: 8px;
-            letter-spacing: 0.3px;
+            padding-left: 8px;
         }
 
         .form-group input {
             width: 100%;
             padding: 16px 22px;
-            border: 2px solid #e2e8f0;
-            border-radius: 50px;
+            background: #ffffff;
+            border: 2px solid #e2eaf2;
+            border-radius: 34px;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #f8fafd;
             color: #0b2440;
             font-weight: 500;
+            transition: all 0.2s ease;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
         }
 
         .form-group input:hover {
-            background: white;
-            border-color: #b0c4de;
+            border-color: #b8cfec;
+            background: #fcfdff;
         }
 
         .form-group input:focus {
-            outline: none;
             border-color: #ff6b4a;
-            background: white;
-            box-shadow: 0 8px 25px rgba(255, 107, 74, 0.2);
+            box-shadow: 0 0 0 4px rgba(255, 107, 74, 0.15);
+            background: #ffffff;
         }
 
-        .form-group input.error {
-            border-color: #ff3b3b;
-            animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        .form-group input::placeholder {
+            color: #9fb0c7;
+            font-weight: 400;
+            opacity: 0.8;
         }
 
-        @keyframes shake {
-            10%, 90% { transform: translateX(-2px); }
-            20%, 80% { transform: translateX(4px); }
-            30%, 50%, 70% { transform: translateX(-6px); }
-            40%, 60% { transform: translateX(6px); }
-        }
-
+        /* Indicateur de force du mot de passe */
         .password-strength {
+            margin-top: 10px;
             height: 6px;
-            background: #e2e8f0;
+            background: #e2eaf2;
             border-radius: 3px;
-            margin-top: 12px;
             overflow: hidden;
         }
 
-        .password-strength-bar {
+        .strength-bar {
             height: 100%;
             width: 0;
-            transition: width 0.4s ease, background 0.4s ease;
+            transition: width 0.3s ease, background 0.3s ease;
             border-radius: 3px;
         }
 
-        .password-strength-text {
+        .strength-text {
             font-size: 0.8rem;
             margin-top: 6px;
             text-align: right;
             font-weight: 600;
         }
 
+        /* Bouton principal */
         .btn-submit {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #0b2440 0%, #1e3f6e 100%);
+            padding: 18px 24px;
+            background: linear-gradient(145deg, #0b2440, #1a3a5f);
             color: white;
             border: none;
-            border-radius: 50px;
+            border-radius: 40px;
             font-size: 1.15rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 25px;
-            box-shadow: 0 8px 25px rgba(11, 36, 64, 0.3);
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.25s ease;
+            margin-top: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 20px -8px rgba(11, 36, 64, 0.4);
+            letter-spacing: 0.5px;
         }
 
-        .btn-submit::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
+        .btn-submit:hover {
+            background: linear-gradient(145deg, #0d2947, #1d416b);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 24px -8px rgba(11, 36, 64, 0.5);
         }
 
-        .btn-submit:hover:not(:disabled)::before {
-            left: 100%;
-        }
-
-        .btn-submit:hover:not(:disabled) {
-            background: linear-gradient(135deg, #0b1f35 0%, #1a3460 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(11, 36, 64, 0.4);
+        .btn-submit:active {
+            transform: translateY(1px);
+            box-shadow: 0 8px 12px -6px rgba(11, 36, 64, 0.4);
         }
 
         .btn-submit:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
-            background: #a0b3c9;
+            transform: none;
         }
 
+        /* Lien vers connexion */
         .login-link {
             text-align: center;
-            margin-top: 30px;
-            color: #6a7b8c;
+            color: #5f738c;
+            font-size: 0.95rem;
         }
 
         .login-link a {
             color: #ff6b4a;
             text-decoration: none;
             font-weight: 700;
-            margin-left: 5px;
-            transition: color 0.3s ease;
+            margin-left: 6px;
+            transition: color 0.2s ease;
             border-bottom: 2px solid transparent;
-            cursor: pointer;
         }
 
         .login-link a:hover {
@@ -284,21 +236,21 @@
             border-bottom-color: #ff8a5c;
         }
 
+        /* Alertes */
         .alert {
             padding: 16px 22px;
-            border-radius: 50px;
-            margin-bottom: 25px;
+            border-radius: 40px;
+            margin-bottom: 28px;
             display: none;
-            animation: slideIn 0.3s ease;
             font-weight: 500;
-            width: 100%;
             text-align: center;
+            animation: slideIn 0.3s ease;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(-15px);
+                transform: translateY(-12px);
             }
             to {
                 opacity: 1;
@@ -307,355 +259,337 @@
         }
 
         .alert-success {
-            background: #e6f7e6;
-            color: #2e7d32;
-            border: 1px solid #a5d6a5;
+            background: #e2f3e4;
+            color: #1e7b4c;
+            border: 1px solid #b0dec5;
         }
 
         .alert-error {
-            background: #ffebed;
-            color: #c62828;
-            border: 1px solid #ffa4a4;
+            background: #ffe9e9;
+            color: #bc2c2c;
+            border: 1px solid #ffb8b8;
         }
 
-        .footer-text {
+        /* Pied de page */
+        .footer {
             text-align: center;
-            margin-top: 25px;
-            font-size: 0.85rem;
-            color: #9aaebf;
-        }
-
-        .requirements-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 10px;
+            margin-top: 30px;
+            color: #98aec6;
             font-size: 0.8rem;
+            border-top: 1px solid #eef4fa;
+            padding-top: 24px;
         }
 
-        .requirement {
-            background: #e9f0f9;
-            padding: 6px 16px;
-            border-radius: 50px;
-            color: #1e3f6e;
-            font-weight: 600;
-            border-left: 2px solid #ff6b4a;
-        }
-
-        /* Message d'information */
-        .info-message {
-            background: linear-gradient(135deg, #fff6f0 0%, #fff0e9 100%);
-            border-left: 4px solid #ff6b4a;
-            padding: 20px;
-            border-radius: 30px;
-            margin-top: 25px;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            box-shadow: 0 4px 15px rgba(255, 107, 74, 0.1);
-            animation: gentlePulse 2s infinite;
-        }
-
-        @keyframes gentlePulse {
-            0% { box-shadow: 0 4px 15px rgba(255, 107, 74, 0.1); }
-            50% { box-shadow: 0 4px 25px rgba(255, 107, 74, 0.2); }
-            100% { box-shadow: 0 4px 15px rgba(255, 107, 74, 0.1); }
-        }
-
-        .info-icon {
-            width: 45px;
-            height: 45px;
-            background: #ff6b4a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.4rem;
-            flex-shrink: 0;
-            box-shadow: 0 5px 15px rgba(255, 107, 74, 0.3);
-        }
-
-        .info-content {
-            flex: 1;
-        }
-
-        .info-content p {
-            color: #4a3c31;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            margin: 0;
-            font-weight: 500;
-        }
-
-        .info-content strong {
-            color: #ff6b4a;
-            display: block;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-        }
-
+        /* Responsive pour petits écrans (Android) */
         @media (max-width: 500px) {
-            .form-section {
-                padding: 35px 25px;
+            .header {
+                padding: 28px 20px 22px;
             }
+
             .logo {
                 font-size: 2.2rem;
             }
-            .info-message {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
+
+            .form-content {
+                padding: 32px 22px 40px;
+            }
+
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .form-group input {
+                padding: 15px 20px;
+            }
+        }
+
+        /* Pour très petits écrans */
+        @media (max-width: 360px) {
+            .container {
+                border-radius: 36px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .form-content {
+                padding: 28px 18px 32px;
+            }
+
+            .btn-submit {
+                padding: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- En-tête -->
         <div class="header">
             <div class="logo">NOVA<span>BANK</span></div>
-            <div class="tagline">Votre nouvelle expérience bancaire</div>
+            <div class="tagline">Votre banque nouvelle génération</div>
         </div>
 
-        <div class="form-section">
-            <h2 class="form-title">Créer un compte</h2>
-            <div class="form-subtitle">
-                Rejoignez des milliers de clients satisfaits
+        <!-- Corps du formulaire -->
+        <div class="form-content">
+            <h1 class="title">Créer un compte</h1>
+            <div class="subtitle">
+                Rejoignez-nous pour une expérience bancaire simple et moderne
             </div>
 
+            <!-- Zone de message -->
             <div class="alert" id="alertMessage"></div>
 
-            <form id="registrationForm">
+            <!-- Formulaire d'inscription -->
+            <form id="registrationForm" novalidate>
                 <div class="form-group">
-                    <label for="nom">Nom complet</label>
-                    <input type="text" id="nom" placeholder="Jean Dupont" required autocomplete="name">
+                    <label for="fullname">Nom complet</label>
+                    <input 
+                        type="text" 
+                        id="fullname" 
+                        name="fullname" 
+                        placeholder="ex: Jean Dupont" 
+                        required
+                        autocomplete="name"
+                    >
                 </div>
 
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email" id="email" placeholder="jean.dupont@email.com" required autocomplete="email">
-                </div>
-
-                <div class="form-group">
-                    <label for="identite">Numéro de carte d'identité</label>
-                    <input type="text" id="identite" placeholder="AB 123456" required autocomplete="off">
-                    <div class="requirements-list">
-                        <span class="requirement">8 à 12 caractères</span>
-                        <span class="requirement">Lettres et chiffres</span>
-                    </div>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="ex: jean.dupont@email.com" 
+                        required
+                        autocomplete="email"
+                    >
                 </div>
 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" placeholder="Créez un mot de passe sécurisé" required autocomplete="new-password">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Créez un mot de passe (min. 6 caractères)" 
+                        required
+                        autocomplete="new-password"
+                        minlength="6"
+                    >
+                    <!-- Barre de force du mot de passe -->
                     <div class="password-strength">
-                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                        <div class="strength-bar" id="passwordStrengthBar"></div>
                     </div>
-                    <div class="password-strength-text" id="passwordStrengthText"></div>
+                    <div class="strength-text" id="passwordStrengthText"></div>
                 </div>
 
                 <div class="form-group">
                     <label for="confirmPassword">Confirmer le mot de passe</label>
-                    <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required autocomplete="new-password">
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        placeholder="Confirmez votre mot de passe" 
+                        required
+                        autocomplete="off"
+                    >
                 </div>
 
                 <button type="submit" class="btn-submit" id="submitBtn">
                     CRÉER MON COMPTE
                 </button>
-
-                <!-- Message d'information sur les retraits (élégant) -->
-                <div class="info-message">
-                    <div class="info-icon">ⓘ</div>
-                    <div class="info-content">
-                        <strong>Sécurisation des retraits</strong>
-                        <p>Pour tout retrait, des documents justificatifs vous seront demandés conformément à la réglementation bancaire.</p>
-                    </div>
-                </div>
             </form>
 
+            <!-- Lien vers connexion -->
             <div class="login-link">
-                Déjà un compte ? <a href="connexion.html">Se connecter</a>
+                Déjà un compte ?
+                <a href="connexion.html">Se connecter</a>
             </div>
 
-            <div class="footer-text">
+            <!-- Footer -->
+            <div class="footer">
                 © 2026 NOVA BANK. Tous droits réservés.
             </div>
         </div>
     </div>
 
+    <!-- Script Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // **CONFIGURATION AVEC VOS NOUVELLES CLÉS**
-        const SUPABASE_URL = 'https://lvbdafzdsuotairqkcnv.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
-        
-        const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // Éléments du DOM
-        const form = document.getElementById('registrationForm');
-        const alertMessage = document.getElementById('alertMessage');
-        const submitBtn = document.getElementById('submitBtn');
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const strengthBar = document.getElementById('passwordStrengthBar');
-        const strengthText = document.getElementById('passwordStrengthText');
-        const identiteInput = document.getElementById('identite');
-
-        // Vérifier si l'utilisateur est déjà connecté
-        async function checkExistingSession() {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (user) {
-                window.location.href = 'dashboard.html';
-            }
-        }
-        checkExistingSession();
-
-        // Formatage automatique du numéro d'identité
-        identiteInput.addEventListener('input', (e) => {
-            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            if (value.length > 2) {
-                value = value.slice(0, 2) + ' ' + value.slice(2, 9);
-            }
-            e.target.value = value;
-        });
-
-        // Vérification de la force du mot de passe
-        passwordInput.addEventListener('input', checkPasswordStrength);
-        confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
-
-        function checkPasswordStrength() {
-            const password = passwordInput.value;
-            let strength = 0;
+        (function() {
+            // --- CONFIGURATION (À METTRE À JOUR) ---
+            const SUPABASE_URL = 'https://lvbdafzdsuotairqkcnv.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
             
-            if (password.length >= 8) strength += 20;
-            if (password.match(/[a-z]/)) strength += 20;
-            if (password.match(/[A-Z]/)) strength += 20;
-            if (password.match(/[0-9]/)) strength += 20;
-            if (password.match(/[^a-zA-Z0-9]/)) strength += 20;
+            // Initialisation Supabase
+            const { createClient } = supabase;
+            const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            strengthBar.style.width = strength + '%';
-            
-            if (strength <= 20) {
-                strengthBar.style.background = '#ff6b4a';
-                strengthText.textContent = 'Très faible';
-                strengthText.style.color = '#ff6b4a';
-            } else if (strength <= 40) {
-                strengthBar.style.background = '#ff9f4a';
-                strengthText.textContent = 'Faible';
-                strengthText.style.color = '#ff9f4a';
-            } else if (strength <= 60) {
-                strengthBar.style.background = '#ffd966';
-                strengthText.textContent = 'Moyen';
-                strengthText.style.color = '#ff9f4a';
-            } else if (strength <= 80) {
-                strengthBar.style.background = '#34a853';
-                strengthText.textContent = 'Bon';
-                strengthText.style.color = '#34a853';
-            } else {
-                strengthBar.style.background = '#34a853';
-                strengthText.textContent = 'Excellent';
-                strengthText.style.color = '#34a853';
+            // --- ÉLÉMENTS DOM ---
+            const form = document.getElementById('registrationForm');
+            const fullnameInput = document.getElementById('fullname');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmInput = document.getElementById('confirmPassword');
+            const submitBtn = document.getElementById('submitBtn');
+            const alertDiv = document.getElementById('alertMessage');
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthText = document.getElementById('passwordStrengthText');
+
+            // --- VÉRIFICATION SESSION EXISTANTE ---
+            async function checkExistingSession() {
+                try {
+                    const { data: { user } } = await _supabase.auth.getUser();
+                    if (user) {
+                        window.location.href = 'dashboard.html';
+                    }
+                } catch (error) {
+                    console.warn("Erreur vérification session", error);
+                }
             }
-        }
+            checkExistingSession();
 
-        function checkPasswordsMatch() {
-            const password = passwordInput.value;
-            const confirm = confirmPasswordInput.value;
-            
-            if (confirm && password !== confirm) {
-                confirmPasswordInput.classList.add('error');
-                return false;
-            } else {
-                confirmPasswordInput.classList.remove('error');
-                return true;
-            }
-        }
-
-        function showAlert(message, type) {
-            alertMessage.textContent = message;
-            alertMessage.className = `alert alert-${type}`;
-            alertMessage.style.display = 'block';
-            
-            setTimeout(() => {
-                alertMessage.style.display = 'none';
-            }, 5000);
-        }
-
-        function validateIdentite(identite) {
-            const cleaned = identite.replace(/\s/g, '');
-            return cleaned.length >= 6 && cleaned.length <= 12;
-        }
-
-        // Gestion de l'inscription
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const nom = document.getElementById('nom').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const identite = document.getElementById('identite').value.trim();
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-
-            if (!nom || !email || !identite || !password || !confirmPassword) {
-                showAlert('Veuillez remplir tous les champs', 'error');
-                return;
+            // --- UTILITAIRES ---
+            function showAlert(message, type) {
+                alertDiv.textContent = message;
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                }, 5000);
             }
 
-            if (!validateIdentite(identite)) {
-                showAlert('Le numéro d\'identité doit contenir entre 6 et 12 caractères', 'error');
-                return;
+            function validateEmail(email) {
+                return String(email)
+                    .toLowerCase()
+                    .match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
             }
 
-            if (password !== confirmPassword) {
-                showAlert('Les mots de passe ne correspondent pas', 'error');
-                return;
+            // --- CALCUL FORCE MOT DE PASSE ---
+            function updatePasswordStrength(password) {
+                let strength = 0;
+                if (password.length >= 6) strength += 20;
+                if (password.length >= 8) strength += 20;
+                if (password.match(/[a-z]/)) strength += 20;
+                if (password.match(/[A-Z]/)) strength += 20;
+                if (password.match(/[0-9]/)) strength += 20;
+
+                strengthBar.style.width = strength + '%';
+
+                if (strength <= 20) {
+                    strengthBar.style.background = '#ff6b4a';
+                    strengthText.textContent = 'Très faible';
+                    strengthText.style.color = '#ff6b4a';
+                } else if (strength <= 40) {
+                    strengthBar.style.background = '#ff8c5a';
+                    strengthText.textContent = 'Faible';
+                    strengthText.style.color = '#ff8c5a';
+                } else if (strength <= 60) {
+                    strengthBar.style.background = '#f0b34b';
+                    strengthText.textContent = 'Moyen';
+                    strengthText.style.color = '#f0b34b';
+                } else if (strength <= 80) {
+                    strengthBar.style.background = '#34a853';
+                    strengthText.textContent = 'Bon';
+                    strengthText.style.color = '#34a853';
+                } else {
+                    strengthBar.style.background = '#2d7a4b';
+                    strengthText.textContent = 'Excellent';
+                    strengthText.style.color = '#2d7a4b';
+                }
             }
 
-            if (password.length < 6) {
-                showAlert('Le mot de passe doit contenir au moins 6 caractères', 'error');
-                return;
-            }
+            passwordInput.addEventListener('input', (e) => {
+                updatePasswordStrength(e.target.value);
+            });
 
-            try {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'CRÉATION...';
+            // --- SOUMISSION FORMULAIRE ---
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-                const { data, error } = await _supabase.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            nom: nom,
-                            numero_identite: identite.replace(/\s/g, '')
+                // Récupération des valeurs
+                const nom = fullnameInput.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const confirm = confirmInput.value;
+
+                // --- VALIDATIONS ---
+                if (!nom || !email || !password || !confirm) {
+                    showAlert('Veuillez remplir tous les champs.', 'error');
+                    return;
+                }
+
+                if (!validateEmail(email)) {
+                    showAlert('Adresse email invalide.', 'error');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showAlert('Le mot de passe doit contenir au moins 6 caractères.', 'error');
+                    return;
+                }
+
+                if (password !== confirm) {
+                    showAlert('Les mots de passe ne correspondent pas.', 'error');
+                    return;
+                }
+
+                // --- APPEL SUPABASE ---
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'CRÉATION EN COURS...';
+
+                    const { data, error } = await _supabase.auth.signUp({
+                        email: email,
+                        password: password,
+                        options: {
+                            data: {
+                                nom: nom
+                            }
                         }
-                    }
-                });
+                    });
 
-                if (error) {
-                    if (error.message.includes('User already registered')) {
-                        throw new Error('Un compte existe déjà avec cet email');
+                    if (error) {
+                        throw error;
+                    }
+
+                    if (data && data.user) {
+                        showAlert('Compte créé avec succès ! Redirection...', 'success');
+                        
+                        // Attendre un peu puis rediriger vers connexion
+                        setTimeout(() => {
+                            window.location.href = 'connexion.html';
+                        }, 2000);
                     } else {
-                        throw new Error(error.message);
+                        throw new Error('Une erreur inattendue est survenue.');
                     }
-                }
 
-                if (data && data.user) {
-                    showAlert('Compte créé avec succès ! Redirection...', 'success');
+                } catch (error) {
+                    console.error('Erreur inscription:', error);
                     
-                    // Redirection après un court délai
-                    setTimeout(() => {
-                        window.location.href = 'connexion.html';
-                    }, 2000);
+                    let message = error.message;
+                    if (error.message.includes('User already registered')) {
+                        message = 'Un compte existe déjà avec cet email.';
+                    } else if (error.message.includes('password')) {
+                        message = 'Le mot de passe doit contenir au moins 6 caractères.';
+                    }
+                    
+                    showAlert(message, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'CRÉER MON COMPTE';
                 }
+            });
 
-            } catch (error) {
-                console.error(error);
-                showAlert(error.message, 'error');
+            // Reset du bouton en cas d'erreur réseau (sécurité)
+            window.addEventListener('pageshow', () => {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'CRÉER MON COMPTE';
-            }
-        });
+            });
+
+        })();
     </script>
 </body>
 </html>
