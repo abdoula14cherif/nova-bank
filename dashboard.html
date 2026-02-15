@@ -183,6 +183,7 @@
             background: none;
             border: none;
             text-decoration: none;
+            font-size: 0.9rem;
         }
 
         .nav-item.active {
@@ -204,6 +205,12 @@
         .alert-error {
             background: #ffeae8;
             color: #ff6b4a;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #8e9daf;
         }
     </style>
 </head>
@@ -263,31 +270,88 @@
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         async function loadUserData() {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (!user) window.location.href = 'connexion.html';
+            try {
+                // Afficher un indicateur de chargement
+                document.getElementById('userBalance').innerHTML = '<span class="loading">Chargement...</span>';
+                
+                // 1. Récupérer l'utilisateur connecté
+                const { data: { user }, error: userError } = await _supabase.auth.getUser();
+                
+                if (userError) throw userError;
+                if (!user) {
+                    window.location.href = 'connexion.html';
+                    return;
+                }
 
-            // Charger le profil
-            const { data: profile } = await _supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
+                // 2. Récupérer son profil
+                const { data: profile, error: profileError } = await _supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
 
-            if (profile) {
-                document.getElementById('userName').textContent = profile.nom?.split(' ')[0] || 'Utilisateur';
-                document.getElementById('welcomeMessage').textContent = `Bonjour ${profile.nom?.split(' ')[0] || ''}`;
-                document.getElementById('userBalance').textContent = (profile.solde || 0).toFixed(2).replace('.', ',') + ' €';
-                document.getElementById('profileName').textContent = profile.nom || '-';
-                document.getElementById('profileEmail').textContent = profile.email || '-';
-                document.getElementById('profileDate').textContent = new Date(profile.created_at).toLocaleDateString();
-                document.getElementById('accountDate').textContent = new Date(profile.created_at).toLocaleDateString();
+                if (profileError) {
+                    console.log('Profil non trouvé, création...');
+                    // Créer le profil s'il n'existe pas
+                    const { error: insertError } = await _supabase
+                        .from('profiles')
+                        .insert([{
+                            id: user.id,
+                            nom: user.email?.split('@')[0] || 'Utilisateur',
+                            email: user.email,
+                            solde: 0,
+                            role: 'user'
+                        }]);
+                    
+                    if (insertError) throw insertError;
+                    
+                    // Recharger le profil
+                    const { data: newProfile } = await _supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single();
+                        
+                    if (newProfile) {
+                        displayUserData(user, newProfile);
+                    }
+                } else {
+                    displayUserData(user, profile);
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                showAlert('Erreur: ' + error.message, 'error');
             }
+        }
 
+        function displayUserData(user, profile) {
+            // Nom d'affichage
+            const displayName = profile.nom?.split(' ')[0] || user.email?.split('@')[0] || 'Utilisateur';
+            
+            // Mettre à jour tous les champs
+            document.getElementById('userName').textContent = displayName;
+            document.getElementById('welcomeMessage').textContent = `Bonjour ${displayName}`;
+            document.getElementById('userBalance').innerHTML = (profile.solde || 0).toFixed(2).replace('.', ',') + ' <small>€</small>';
+            document.getElementById('profileName').textContent = profile.nom || '-';
+            document.getElementById('profileEmail').textContent = profile.email || '-';
+            
+            const dateInscription = new Date(profile.created_at).toLocaleDateString();
+            document.getElementById('profileDate').textContent = dateInscription;
+            document.getElementById('accountDate').textContent = dateInscription;
+            
             // Dernière connexion
-            const { data: { user: userData } } = await _supabase.auth.getUser();
-            document.getElementById('lastLogin').textContent = userData?.last_sign_in_at 
-                ? new Date(userData.last_sign_in_at).toLocaleString() 
+            document.getElementById('lastLogin').textContent = user.last_sign_in_at 
+                ? new Date(user.last_sign_in_at).toLocaleString() 
                 : 'Première connexion';
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
         }
 
         async function logout() {
@@ -295,7 +359,8 @@
             window.location.href = 'connexion.html';
         }
 
-        loadUserData();
+        // Charger les données au chargement de la page
+        window.onload = loadUserData;
     </script>
 </body>
 </html>
