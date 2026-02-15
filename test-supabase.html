@@ -5,32 +5,62 @@
 </head>
 <body>
     <h1>🔧 Test de connexion Supabase</h1>
-    <div id="result" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc;"></div>
+    <div id="result" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc; font-family: monospace;"></div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Récupérer l'élément résultat
         const resultDiv = document.getElementById('result');
         
         function log(message, isError = false) {
             const color = isError ? 'red' : 'green';
-            resultDiv.innerHTML += `<p style="color: ${color}">${message}</p>`;
+            resultDiv.innerHTML += `<p style="color: ${color}; margin: 5px 0;">${message}</p>`;
         }
 
         async function test() {
             try {
                 log('🔄 Démarrage du test...');
                 
-                // ✅ CORRECTION: Bien initialiser le client
+                // ✅ Créer le client avec un timeout plus long
                 const { createClient } = supabase;
                 const monClient = createClient(
                     'https://lvbdafzdsuotairqkcnv.supabase.co',
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI'
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI',
+                    {
+                        auth: {
+                            autoRefreshToken: true,
+                            persistSession: true
+                        },
+                        global: {
+                            // Timeout plus long (60 secondes)
+                            fetch: (url, options) => {
+                                const controller = new AbortController();
+                                const timeoutId = setTimeout(() => controller.abort(), 60000);
+                                
+                                return fetch(url, {
+                                    ...options,
+                                    signal: controller.signal
+                                }).finally(() => clearTimeout(timeoutId));
+                            }
+                        }
+                    }
                 );
                 
                 log('✅ Client Supabase créé avec succès');
 
+                // Test ping simple d'abord
+                log('🔄 Test de connexion réseau...');
+                try {
+                    const pingResult = await fetch('https://lvbdafzdsuotairqkcnv.supabase.co', {
+                        method: 'HEAD',
+                        mode: 'no-cors'
+                    });
+                    log('✅ Serveur Supabase accessible');
+                } catch (e) {
+                    log(`⚠️ Le serveur répond mais avec CORS: ${e.message}`, true);
+                }
+
                 // Test 1: Vérifier la connexion à la base
+                log('🔄 Test de la base de données...');
                 const { data, error } = await monClient
                     .from('profiles')
                     .select('count', { count: 'exact', head: true });
@@ -42,26 +72,42 @@
                 }
 
                 // Test 2: Vérifier l'authentification
+                log('🔄 Test d\'authentification...');
                 const { data: { user }, error: authError } = await monClient.auth.getUser();
                 
                 if (authError) {
                     log(`❌ Erreur auth: ${authError.message}`, true);
                 } else if (user) {
                     log(`✅ Utilisateur connecté: ${user.email}`);
+                    
+                    // Test 3: Charger le profil de l'utilisateur
+                    log('🔄 Chargement du profil...');
+                    const { data: profile, error: profileError } = await monClient
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single();
+                    
+                    if (profileError) {
+                        log(`❌ Erreur profil: ${profileError.message}`, true);
+                    } else {
+                        log('✅ Profil chargé avec succès');
+                        log(`📊 Solde: ${profile.solde || 0} €`);
+                    }
                 } else {
                     log('ℹ️ Aucun utilisateur connecté');
-                }
-
-                // Test 3: Essayer de lire les données
-                const { data: profiles, error: profilesError } = await monClient
-                    .from('profiles')
-                    .select('*')
-                    .limit(5);
-                
-                if (profilesError) {
-                    log(`❌ Erreur lecture profiles: ${profilesError.message}`, true);
-                } else {
-                    log(`✅ Données chargées: ${profiles.length} profils trouvés`);
+                    
+                    // Test 4: Essayer de lire quand même
+                    log('🔄 Test de lecture anonyme...');
+                    const { data: profiles, error: profilesError } = await monClient
+                        .from('profiles')
+                        .select('count', { count: 'exact', head: true });
+                    
+                    if (profilesError) {
+                        log(`❌ Lecture anonyme: ${profilesError.message}`, true);
+                    } else {
+                        log('✅ Lecture anonyme réussie');
+                    }
                 }
 
             } catch (e) {
