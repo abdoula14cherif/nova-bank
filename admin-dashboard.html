@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NOVA BANK - Administration complète</title>
     <style>
-        /* GARDEZ TOUT VOTRE CSS ICI (identique) */
+        /* Gardez tout votre CSS ici */
         * {
             margin: 0;
             padding: 0;
@@ -715,7 +715,25 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
         
         const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
+            },
+            global: {
+                fetch: (...args) => {
+                    // Augmenter le timeout à 30 secondes
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    
+                    return fetch(args[0], {
+                        ...args[1],
+                        signal: controller.signal
+                    }).finally(() => clearTimeout(timeoutId));
+                }
+            }
+        });
 
         const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
         let allUsers = [];
@@ -723,6 +741,7 @@
         let currentUserId = null;
         let currentPage = 1;
         const usersPerPage = 10;
+        let retryCount = 0;
 
         // ✅ VÉRIFIER ADMIN
         async function checkAdmin() {
@@ -739,39 +758,54 @@
             }
         }
 
+        // ✅ FONCTION POUR RÉESSAYER EN CAS D'ERREUR
+        async function fetchWithRetry(fn, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    return await fn();
+                } catch (error) {
+                    console.log(`Tentative ${i + 1}/${maxRetries} échouée:`, error);
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
+                }
+            }
+        }
+
         // ✅ CHARGER TOUTES LES DONNÉES
         async function loadAllData() {
             try {
-                const { data, error } = await _supabase
-                    .from('profiles')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+                const result = await fetchWithRetry(async () => {
+                    return await _supabase
+                        .from('profiles')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                });
 
-                if (error) {
-                    console.error('Erreur Supabase:', error);
-                    document.getElementById('usersTable').innerHTML = `
-                        <p style="color: red; text-align: center; padding: 40px;">
-                            ❌ Erreur: ${error.message}
-                        </p>
-                    `;
-                    return;
-                }
+                if (result.error) throw result.error;
 
-                allUsers = data || [];
+                allUsers = result.data || [];
                 filteredUsers = [...allUsers];
                 
-                // Mettre à jour les statistiques
                 updateStats();
-                
-                // Afficher les utilisateurs
                 displayUsers();
                 
             } catch (error) {
                 console.error('Erreur chargement:', error);
+                
+                let errorMessage = error.message;
+                if (error.name === 'AbortError' || error.message.includes('aborted')) {
+                    errorMessage = 'La connexion a été interrompue. Veuillez réessayer.';
+                }
+                
                 document.getElementById('usersTable').innerHTML = `
-                    <p style="color: red; text-align: center; padding: 40px;">
-                        ❌ Erreur: ${error.message}
-                    </p>
+                    <div style="text-align: center; padding: 40px;">
+                        <p style="color: #ff6b4a; font-size: 1.2rem; margin-bottom: 20px;">
+                            ❌ Erreur: ${errorMessage}
+                        </p>
+                        <button onclick="loadAllData()" class="btn-refresh" style="padding: 12px 30px;">
+                            🔄 Réessayer
+                        </button>
+                    </div>
                 `;
             }
         }
@@ -861,7 +895,6 @@
 
         // ✅ FILTRES
         function filterUsers(type) {
-            // Mettre à jour les boutons actifs
             document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
             if (type === 'all') document.getElementById('filterAll').classList.add('active');
             if (type === 'admins') document.getElementById('filterAdmins').classList.add('active');
