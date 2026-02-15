@@ -4,41 +4,72 @@
     <title>Test Supabase</title>
 </head>
 <body>
-    <h1>Test de connexion Supabase</h1>
-    <div id="result"></div>
+    <h1>🔧 Test de connexion Supabase</h1>
+    <div id="result" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc;"></div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        const result = document.getElementById('result');
+        // Récupérer l'élément résultat
+        const resultDiv = document.getElementById('result');
         
+        function log(message, isError = false) {
+            const color = isError ? 'red' : 'green';
+            resultDiv.innerHTML += `<p style="color: ${color}">${message}</p>`;
+        }
+
         async function test() {
             try {
-                result.innerHTML = '🔄 Test de connexion...';
+                log('🔄 Démarrage du test...');
                 
-                const supabase = supabase.createClient(
+                // ✅ CORRECTION: Bien initialiser le client
+                const { createClient } = supabase;
+                const monClient = createClient(
                     'https://lvbdafzdsuotairqkcnv.supabase.co',
                     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI'
                 );
                 
-                // Test 1: Connexion simple
-                result.innerHTML += '<br>✅ Client créé';
-                
-                // Test 2: Tentative de requête
-                const { data, error } = await supabase
+                log('✅ Client Supabase créé avec succès');
+
+                // Test 1: Vérifier la connexion à la base
+                const { data, error } = await monClient
                     .from('profiles')
                     .select('count', { count: 'exact', head: true });
                 
                 if (error) {
-                    result.innerHTML += `<br>❌ Erreur: ${error.message}`;
+                    log(`❌ Erreur base de données: ${error.message}`, true);
                 } else {
-                    result.innerHTML += '<br>✅ Connexion réussie à la base';
+                    log('✅ Connexion à la base de données réussie');
                 }
+
+                // Test 2: Vérifier l'authentification
+                const { data: { user }, error: authError } = await monClient.auth.getUser();
                 
+                if (authError) {
+                    log(`❌ Erreur auth: ${authError.message}`, true);
+                } else if (user) {
+                    log(`✅ Utilisateur connecté: ${user.email}`);
+                } else {
+                    log('ℹ️ Aucun utilisateur connecté');
+                }
+
+                // Test 3: Essayer de lire les données
+                const { data: profiles, error: profilesError } = await monClient
+                    .from('profiles')
+                    .select('*')
+                    .limit(5);
+                
+                if (profilesError) {
+                    log(`❌ Erreur lecture profiles: ${profilesError.message}`, true);
+                } else {
+                    log(`✅ Données chargées: ${profiles.length} profils trouvés`);
+                }
+
             } catch (e) {
-                result.innerHTML += `<br>❌ Exception: ${e.message}`;
+                log(`❌ Exception: ${e.message}`, true);
             }
         }
-        
+
+        // Lancer le test
         test();
     </script>
 </body>
