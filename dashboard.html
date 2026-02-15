@@ -9,12 +9,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
             background: #f5f9ff;
             min-height: 100vh;
+            padding-bottom: 90px;
         }
 
         .header {
@@ -24,6 +25,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
@@ -39,142 +43,383 @@
             background: rgba(255,255,255,0.1);
             padding: 10px 20px;
             border-radius: 40px;
+            font-weight: 500;
         }
 
         .container {
-            max-width: 800px;
-            margin: 20px auto;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
         }
 
-        .card {
-            background: white;
-            border-radius: 30px;
+        .welcome-card {
+            background: linear-gradient(135deg, #0b2440 0%, #1e3f6e 100%);
+            color: white;
             padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-radius: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px -15px rgba(11,36,64,0.4);
         }
 
-        .balance {
-            font-size: 3rem;
-            font-weight: bold;
+        .welcome-card h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .balance-card {
+            background: white;
+            border-radius: 40px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.1);
+            border: 2px solid #eef2f6;
+        }
+
+        .balance-label {
+            color: #5f738c;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 3.5rem;
+            font-weight: 700;
             color: #0b2440;
         }
 
-        .info {
-            margin: 10px 0;
-            font-size: 1.1rem;
+        .balance-amount small {
+            font-size: 1.2rem;
+            color: #98aec6;
+            font-weight: 400;
         }
 
-        .info strong {
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 30px;
+            padding: 25px;
+            border: 1px solid #eef2f6;
+        }
+
+        .info-card h3 {
+            color: #0b2440;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: #5f738c;
+            margin-bottom: 8px;
+        }
+
+        .info-card strong {
             color: #ff6b4a;
         }
 
         .btn {
-            display: inline-block;
             padding: 15px 30px;
-            background: #0b2440;
-            color: white;
-            text-decoration: none;
+            border: none;
             border-radius: 40px;
-            margin: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .error {
-            color: red;
-            padding: 20px;
+        .btn-primary {
+            background: #0b2440;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e3f6e;
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            background: #ff6b4a;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #ff8a5c;
+            transform: translateY(-3px);
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-top: 2px solid #ff6b4a;
+            border-radius: 40px 40px 0 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8e9daf;
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .nav-item.active {
+            color: #ff6b4a;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #e3f5eb;
+            color: #34a853;
+        }
+
+        .alert-error {
+            background: #ffeae8;
+            color: #ff6b4a;
+        }
+
+        .loading {
             text-align: center;
+            padding: 40px;
+            color: #8e9daf;
+        }
+
+        .spinner {
+            border: 4px solid #f0f4ff;
+            border-top: 4px solid #0b2440;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-box {
+            text-align: center;
+            padding: 30px;
+            background: #ffeae8;
+            border-radius: 40px;
+            border: 2px solid #ff6b4a;
+            margin: 20px 0;
+        }
+
+        .error-box p {
+            color: #ff6b4a;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            background: #0b2440;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .retry-btn:hover {
+            background: #1e3f6e;
         }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="logo">NOVA<span>BANK</span></div>
-        <div class="user-info" id="userEmail">Chargement...</div>
+        <div class="user-info" id="userInfo">Bonjour, <span id="userName">...</span></div>
     </header>
 
     <div class="container">
-        <div id="content">
-            <div class="card" style="text-align: center;">
-                <p>Chargement de vos données...</p>
+        <div class="alert" id="alertMessage"></div>
+
+        <div class="welcome-card">
+            <h1 id="welcomeMessage">Bienvenue sur votre compte</h1>
+            <p>Gérez votre argent en toute sécurité</p>
+        </div>
+
+        <div class="balance-card" id="balanceCard">
+            <div class="balance-label">Solde disponible</div>
+            <div class="balance-amount" id="userBalance">0,00 <small>€</small></div>
+        </div>
+
+        <div class="info-grid" id="infoGrid">
+            <div class="info-card">
+                <h3>📋 Informations personnelles</h3>
+                <p><strong>Nom :</strong> <span id="profileName">-</span></p>
+                <p><strong>Email :</strong> <span id="profileEmail">-</span></p>
+                <p><strong>Membre depuis :</strong> <span id="profileDate">-</span></p>
             </div>
+
+            <div class="info-card">
+                <h3>📊 Statistiques</h3>
+                <p><strong>Compte créé le :</strong> <span id="accountDate">-</span></p>
+                <p><strong>Dernière connexion :</strong> <span id="lastLogin">-</span></p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="retrait.html" class="btn btn-primary">💳 Effectuer un retrait</a>
+            <a href="transfert.html" class="btn btn-secondary">↗️ Transférer</a>
         </div>
     </div>
 
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item active">Accueil</a>
+        <a href="retrait.html" class="nav-item">Retrait</a>
+        <a href="transfert.html" class="nav-item">Transfert</a>
+        <button class="nav-item" onclick="logout()">Déconnexion</button>
+    </nav>
+
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        const supabase = supabase.createClient(
-            'https://lvbdafzdsuotairqkcnv.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI'
-        );
+        // ✅ CONFIGURATION IDENTIQUE À LA PAGE ADMIN QUI FONCTIONNE
+        const SUPABASE_URL = 'https://lvbdafzdsuotairqkcnv.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
+        
+        const { createClient } = supabase;
+        
+        // ✅ Initialisation avec timeout plus long
+        const novabank = createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
+            },
+            global: {
+                fetch: (url, options) => {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    
+                    return fetch(url, {
+                        ...options,
+                        signal: controller.signal
+                    }).finally(() => clearTimeout(timeoutId));
+                }
+            }
+        });
 
-        async function loadData() {
+        // ✅ FONCTION PRINCIPALE CORRIGÉE
+        async function loadUserData() {
             try {
-                // 1. Vérifier la connexion
-                const { data: { user }, error } = await supabase.auth.getUser();
+                // Afficher le chargement
+                document.getElementById('userBalance').innerHTML = 'Chargement...';
+                
+                // 1. Récupérer l'utilisateur connecté
+                const { data: { user }, error } = await novabank.auth.getUser();
                 
                 if (error || !user) {
+                    console.log('Non connecté, redirection');
                     window.location.href = 'connexion.html';
                     return;
                 }
 
-                // 2. Afficher l'email
-                document.getElementById('userEmail').textContent = user.email;
-
-                // 3. Charger le profil
-                const { data: profile, error: profileError } = await supabase
+                // 2. Afficher les infos de base
+                document.getElementById('userName').textContent = user.email?.split('@')[0] || 'Utilisateur';
+                document.getElementById('welcomeMessage').textContent = `Bonjour ${user.email?.split('@')[0] || ''}`;
+                
+                // 3. Récupérer le profil
+                const { data: profile, error: profileError } = await novabank
                     .from('profiles')
                     .select('*')
                     .eq('id', user.id)
                     .single();
 
-                // 4. Afficher les données
-                let html = '';
-                
                 if (profileError) {
-                    html = `
-                        <div class="card">
-                            <h2>Bienvenue ${user.email}</h2>
-                            <p>Votre profil est en cours de création...</p>
-                            <p>Solde par défaut: 0 €</p>
-                        </div>
-                    `;
-                } else {
-                    html = `
-                        <div class="card">
-                            <h2>Bonjour ${profile.nom || user.email}</h2>
-                            <div class="balance">${(profile.solde || 0).toFixed(2)} €</div>
-                        </div>
-                        
-                        <div class="card">
-                            <h3>Mes informations</h3>
-                            <div class="info"><strong>Nom:</strong> ${profile.nom || '-'}</div>
-                            <div class="info"><strong>Email:</strong> ${profile.email || '-'}</div>
-                            <div class="info"><strong>Rôle:</strong> ${profile.role || 'user'}</div>
-                            <div class="info"><strong>Membre depuis:</strong> ${new Date(profile.created_at).toLocaleDateString()}</div>
-                        </div>
-                        
-                        <div style="text-align: center;">
-                            <a href="retrait.html" class="btn">Effectuer un retrait</a>
-                        </div>
-                    `;
+                    console.log('Profil non trouvé, création...');
+                    
+                    // Créer le profil s'il n'existe pas
+                    const { error: insertError } = await novabank
+                        .from('profiles')
+                        .insert([{
+                            id: user.id,
+                            nom: user.email?.split('@')[0] || 'Utilisateur',
+                            email: user.email,
+                            solde: 0,
+                            role: 'user'
+                        }]);
+                    
+                    if (insertError) {
+                        throw insertError;
+                    }
+                    
+                    // Recharger la page pour voir le nouveau profil
+                    location.reload();
+                    return;
                 }
+
+                // 4. Afficher les données du profil
+                document.getElementById('userBalance').innerHTML = (profile.solde || 0).toFixed(2).replace('.', ',') + ' <small>€</small>';
+                document.getElementById('profileName').textContent = profile.nom || '-';
+                document.getElementById('profileEmail').textContent = profile.email || '-';
                 
-                document.getElementById('content').innerHTML = html;
+                const dateInscription = profile.created_at 
+                    ? new Date(profile.created_at).toLocaleDateString('fr-FR')
+                    : new Date().toLocaleDateString();
+                document.getElementById('profileDate').textContent = dateInscription;
+                document.getElementById('accountDate').textContent = dateInscription;
+                
+                // Dernière connexion
+                document.getElementById('lastLogin').textContent = user.last_sign_in_at 
+                    ? new Date(user.last_sign_in_at).toLocaleString('fr-FR') 
+                    : 'Première connexion';
 
             } catch (error) {
                 console.error('Erreur:', error);
-                document.getElementById('content').innerHTML = `
-                    <div class="card error">
-                        <h3>❌ Erreur de chargement</h3>
+                
+                // Afficher l'erreur dans la carte de solde
+                document.getElementById('balanceCard').innerHTML = `
+                    <div class="error-box">
+                        <p>❌ Erreur de chargement</p>
                         <p>${error.message}</p>
-                        <button onclick="location.reload()" class="btn">Réessayer</button>
+                        <button onclick="location.reload()" class="retry-btn">🔄 Réessayer</button>
                     </div>
                 `;
             }
         }
 
-        loadData();
+        async function logout() {
+            await novabank.auth.signOut();
+            window.location.href = 'connexion.html';
+        }
+
+        // Charger les données au démarrage
+        window.onload = loadUserData;
     </script>
 </body>
 </html>
