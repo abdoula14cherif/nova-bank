@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Supabase</title>
+</head>
+<body>
+    <h1>Test de connexion Supabase</h1>
+    <div id="result"></div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const result = document.getElementById('result');
+        
+        async function test() {
+            try {
+                result.innerHTML = '🔄 Test de connexion...';
+                
+                const supabase = supabase.createClient(
+                    'https://lvbdafzdsuotairqkcnv.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI'
+                );
+                
+                // Test 1: Connexion simple
+                result.innerHTML += '<br>✅ Client créé';
+                
+                // Test 2: Tentative de requête
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('count', { count: 'exact', head: true });
+                
+                if (error) {
+                    result.innerHTML += `<br>❌ Erreur: ${error.message}`;
+                } else {
+                    result.innerHTML += '<br>✅ Connexion réussie à la base';
+                }
+                
+            } catch (e) {
+                result.innerHTML += `<br>❌ Exception: ${e.message}`;
+            }
+        }
+        
+        test();
+    </script>
+</body>
+</html>
