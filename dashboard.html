@@ -212,6 +212,51 @@
             padding: 40px;
             color: #8e9daf;
         }
+
+        .spinner {
+            border: 4px solid #f0f4ff;
+            border-top: 4px solid #0b2440;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 40px;
+            border: 2px solid #ff6b4a;
+        }
+
+        .error-container p {
+            color: #ff6b4a;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            background: #0b2440;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .retry-btn:hover {
+            background: #1e3f6e;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -267,16 +312,52 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
         
         const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
+            },
+            global: {
+                fetch: (...args) => {
+                    // Timeout de 30 secondes
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    
+                    return fetch(args[0], {
+                        ...args[1],
+                        signal: controller.signal
+                    }).finally(() => clearTimeout(timeoutId));
+                }
+            }
+        });
 
+        let retryCount = 0;
+
+        // ✅ FONCTION POUR RÉESSAYER
+        async function fetchWithRetry(fn, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    return await fn();
+                } catch (error) {
+                    console.log(`Tentative ${i + 1}/${maxRetries} échouée:`, error);
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
+                }
+            }
+        }
+
+        // ✅ CHARGER LES DONNÉES UTILISATEUR
         async function loadUserData() {
             try {
-                // Afficher un indicateur de chargement
-                document.getElementById('userBalance').innerHTML = '<span class="loading">Chargement...</span>';
+                // Afficher le chargement
+                document.getElementById('userBalance').innerHTML = '<div class="spinner"></div><p>Chargement...</p>';
                 
                 // 1. Récupérer l'utilisateur connecté
-                const { data: { user }, error: userError } = await _supabase.auth.getUser();
-                
+                const { data: { user }, error: userError } = await fetchWithRetry(async () => {
+                    return await _supabase.auth.getUser();
+                });
+
                 if (userError) throw userError;
                 if (!user) {
                     window.location.href = 'connexion.html';
@@ -284,11 +365,13 @@
                 }
 
                 // 2. Récupérer son profil
-                const { data: profile, error: profileError } = await _supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', user.id)
-                    .single();
+                const { data: profile, error: profileError } = await fetchWithRetry(async () => {
+                    return await _supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single();
+                });
 
                 if (profileError) {
                     console.log('Profil non trouvé, création...');
@@ -321,11 +404,29 @@
 
             } catch (error) {
                 console.error('Erreur:', error);
-                showAlert('Erreur: ' + error.message, 'error');
+                
+                let errorMessage = error.message;
+                if (error.name === 'AbortError' || error.message.includes('aborted')) {
+                    errorMessage = 'La connexion a été interrompue. Veuillez réessayer.';
+                }
+                
+                // Afficher l'erreur avec bouton réessayer
+                document.querySelector('.balance-card').innerHTML = `
+                    <div class="error-container">
+                        <p>❌ ${errorMessage}</p>
+                        <button onclick="loadUserData()" class="retry-btn">🔄 Réessayer</button>
+                    </div>
+                `;
+                
+                // Cacher les autres infos
+                document.querySelector('.info-grid').style.display = 'none';
             }
         }
 
         function displayUserData(user, profile) {
+            // Réafficher la grille d'infos
+            document.querySelector('.info-grid').style.display = 'grid';
+            
             // Nom d'affichage
             const displayName = profile.nom?.split(' ')[0] || user.email?.split('@')[0] || 'Utilisateur';
             
@@ -336,13 +437,19 @@
             document.getElementById('profileName').textContent = profile.nom || '-';
             document.getElementById('profileEmail').textContent = profile.email || '-';
             
-            const dateInscription = new Date(profile.created_at).toLocaleDateString();
+            const dateInscription = new Date(profile.created_at).toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
             document.getElementById('profileDate').textContent = dateInscription;
             document.getElementById('accountDate').textContent = dateInscription;
             
             // Dernière connexion
             document.getElementById('lastLogin').textContent = user.last_sign_in_at 
-                ? new Date(user.last_sign_in_at).toLocaleString() 
+                ? new Date(user.last_sign_in_at).toLocaleString('fr-FR') 
                 : 'Première connexion';
         }
 
@@ -359,7 +466,17 @@
             window.location.href = 'connexion.html';
         }
 
-        // Charger les données au chargement de la page
+        // ✅ GESTION DE LA CONNEXION RÉSEAU
+        window.addEventListener('online', function() {
+            showAlert('📶 Connexion rétablie', 'success');
+            loadUserData();
+        });
+
+        window.addEventListener('offline', function() {
+            showAlert('📶 Connexion internet perdue', 'error');
+        });
+
+        // ✅ CHARGEMENT INITIAL
         window.onload = loadUserData;
     </script>
 </body>
