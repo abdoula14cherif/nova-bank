@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NOVA BANK - Administration complète</title>
     <style>
-        /* Gardez tout votre CSS ici (identique à votre code) */
+        /* Gardez tout votre CSS ici */
         * {
             margin: 0;
             padding: 0;
@@ -715,7 +715,25 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2YmRhZnpkc3VvdGFpcnFrY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwNTg0MTUsImV4cCI6MjA4NjYzNDQxNX0.MWPo0ZnTNTzK4_8N1GB_mtri7LkgfP43W4gjBGB7zhI';
         
         const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
+            },
+            global: {
+                fetch: (...args) => {
+                    // Augmenter le timeout à 30 secondes
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    
+                    return fetch(args[0], {
+                        ...args[1],
+                        signal: controller.signal
+                    }).finally(() => clearTimeout(timeoutId));
+                }
+            }
+        });
 
         const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
         let allUsers = [];
@@ -723,6 +741,7 @@
         let currentUserId = null;
         let currentPage = 1;
         const usersPerPage = 10;
+        let retryCount = 0;
 
         // ✅ VÉRIFIER ADMIN
         async function checkAdmin() {
@@ -739,25 +758,32 @@
             }
         }
 
+        // ✅ FONCTION POUR RÉESSAYER EN CAS D'ERREUR
+        async function fetchWithRetry(fn, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    return await fn();
+                } catch (error) {
+                    console.log(`Tentative ${i + 1}/${maxRetries} échouée:`, error);
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
+                }
+            }
+        }
+
         // ✅ CHARGER TOUTES LES DONNÉES
         async function loadAllData() {
             try {
-                const { data, error } = await _supabase
-                    .from('profiles')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+                const result = await fetchWithRetry(async () => {
+                    return await _supabase
+                        .from('profiles')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                });
 
-                if (error) {
-                    console.error('Erreur Supabase:', error);
-                    document.getElementById('usersTable').innerHTML = `
-                        <p style="color: red; text-align: center; padding: 40px;">
-                            ❌ Erreur: ${error.message}
-                        </p>
-                    `;
-                    return;
-                }
+                if (result.error) throw result.error;
 
-                allUsers = data || [];
+                allUsers = result.data || [];
                 filteredUsers = [...allUsers];
                 
                 updateStats();
@@ -765,10 +791,21 @@
                 
             } catch (error) {
                 console.error('Erreur chargement:', error);
+                
+                let errorMessage = error.message;
+                if (error.name === 'AbortError' || error.message.includes('aborted')) {
+                    errorMessage = 'La connexion a été interrompue. Veuillez réessayer.';
+                }
+                
                 document.getElementById('usersTable').innerHTML = `
-                    <p style="color: red; text-align: center; padding: 40px;">
-                        ❌ Erreur: ${error.message}
-                    </p>
+                    <div style="text-align: center; padding: 40px;">
+                        <p style="color: #ff6b4a; font-size: 1.2rem; margin-bottom: 20px;">
+                            ❌ Erreur: ${errorMessage}
+                        </p>
+                        <button onclick="loadAllData()" class="btn-refresh" style="padding: 12px 30px;">
+                            🔄 Réessayer
+                        </button>
+                    </div>
                 `;
             }
         }
@@ -874,10 +911,7 @@
         // ✅ MODALS - AJOUT
         function openAddModal(id, name, balance) {
             currentUserId = id;
-            const userInfo = document.getElementById('addUserInfo');
-            if (userInfo) {
-                userInfo.innerHTML = `<p><strong>${name || 'Utilisateur'}</strong> - Solde actuel: ${balance || 0} €</p>`;
-            }
+            document.getElementById('addUserInfo').innerHTML = `<p><strong>${name || 'User'}</strong> - Solde: ${balance || 0} €</p>`;
             document.getElementById('addModal').classList.add('active');
         }
 
@@ -889,8 +923,6 @@
             }
             
             const user = allUsers.find(u => u.id === currentUserId);
-            if (!user) return;
-            
             const newBalance = (user.solde || 0) + amount;
 
             const { error } = await _supabase
@@ -901,7 +933,7 @@
             if (error) {
                 showAlert(error.message, 'error');
             } else {
-                showAlert(`${amount} € ajouté avec succès`, 'success');
+                showAlert(`${amount} € ajouté`, 'success');
                 closeModal('addModal');
                 loadAllData();
             }
@@ -910,10 +942,7 @@
         // ✅ MODALS - RETRAIT
         function openRemoveModal(id, name, balance) {
             currentUserId = id;
-            const userInfo = document.getElementById('removeUserInfo');
-            if (userInfo) {
-                userInfo.innerHTML = `<p><strong>${name || 'Utilisateur'}</strong> - Solde actuel: ${balance || 0} €</p>`;
-            }
+            document.getElementById('removeUserInfo').innerHTML = `<p><strong>${name || 'User'}</strong> - Solde: ${balance || 0} €</p>`;
             document.getElementById('removeModal').classList.add('active');
         }
 
@@ -925,8 +954,6 @@
             }
             
             const user = allUsers.find(u => u.id === currentUserId);
-            if (!user) return;
-            
             const newBalance = (user.solde || 0) - amount;
             
             if (newBalance < 0) {
@@ -942,7 +969,7 @@
             if (error) {
                 showAlert(error.message, 'error');
             } else {
-                showAlert(`${amount} € retiré avec succès`, 'success');
+                showAlert(`${amount} € retiré`, 'success');
                 closeModal('removeModal');
                 loadAllData();
             }
@@ -951,34 +978,20 @@
         // ✅ MODALS - MODIFICATION
         function openEditModal(id) {
             const user = allUsers.find(u => u.id === id);
-            if (!user) return;
-            
             currentUserId = id;
-            const userInfo = document.getElementById('editUserInfo');
-            if (userInfo) {
-                userInfo.innerHTML = `<p><strong>ID:</strong> ${id.substring(0,8)}...</p>`;
-            }
-            
-            const nomInput = document.getElementById('editNom');
-            const emailInput = document.getElementById('editEmail');
-            const roleSelect = document.getElementById('editRole');
-            
-            if (nomInput) nomInput.value = user.nom || '';
-            if (emailInput) emailInput.value = user.email || '';
-            if (roleSelect) roleSelect.value = user.role || 'user';
-            
+            document.getElementById('editUserInfo').innerHTML = `<p><strong>ID:</strong> ${id.substring(0,8)}...</p>`;
+            document.getElementById('editNom').value = user.nom || '';
+            document.getElementById('editEmail').value = user.email || '';
+            document.getElementById('editRole').value = user.role || 'user';
             document.getElementById('editModal').classList.add('active');
         }
 
         async function confirmEdit() {
-            const nom = document.getElementById('editNom')?.value || '';
-            const email = document.getElementById('editEmail')?.value || '';
-            const role = document.getElementById('editRole')?.value || 'user';
-            
-            const updates = {};
-            if (nom) updates.nom = nom;
-            if (email) updates.email = email;
-            if (role) updates.role = role;
+            const updates = {
+                nom: document.getElementById('editNom').value,
+                email: document.getElementById('editEmail').value,
+                role: document.getElementById('editRole').value
+            };
             
             const { error } = await _supabase
                 .from('profiles')
@@ -988,7 +1001,7 @@
             if (error) {
                 showAlert(error.message, 'error');
             } else {
-                showAlert('Utilisateur modifié avec succès', 'success');
+                showAlert('Utilisateur modifié', 'success');
                 closeModal('editModal');
                 loadAllData();
             }
@@ -1028,7 +1041,7 @@
             if (error) {
                 showAlert(error.message, 'error');
             } else {
-                showAlert('Utilisateur supprimé avec succès', 'success');
+                showAlert('Utilisateur supprimé', 'success');
                 closeModal('deleteModal');
                 loadAllData();
             }
